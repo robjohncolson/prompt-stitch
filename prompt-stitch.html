@@ -1,0 +1,1070 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Prompt Stitch - Multi-LLM Consensus Tool</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+      background: #1a1a2e;
+      color: #eee;
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid #333;
+    }
+
+    h1 {
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: #fff;
+    }
+
+    .header-actions {
+      display: flex;
+      gap: 10px;
+    }
+
+    .btn {
+      padding: 8px 16px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 0.9rem;
+      transition: all 0.2s;
+    }
+
+    .btn-primary {
+      background: #4a4a6a;
+      color: #fff;
+    }
+
+    .btn-primary:hover {
+      background: #5a5a7a;
+    }
+
+    .btn-secondary {
+      background: #2d2d44;
+      color: #ccc;
+    }
+
+    .btn-secondary:hover {
+      background: #3d3d54;
+    }
+
+    .btn-danger {
+      background: #5c2a2a;
+      color: #f88;
+    }
+
+    .btn-danger:hover {
+      background: #7c3a3a;
+    }
+
+    /* Round Navigation */
+    .round-nav {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 20px;
+      padding: 12px;
+      background: #252538;
+      border-radius: 10px;
+      overflow-x: auto;
+    }
+
+    .round-nav-label {
+      font-size: 0.85rem;
+      color: #888;
+      margin-right: 8px;
+      white-space: nowrap;
+    }
+
+    .round-tabs {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+
+    .round-tab {
+      padding: 6px 14px;
+      background: #1a1a2e;
+      border: 1px solid #3d3d54;
+      border-radius: 20px;
+      color: #aaa;
+      font-size: 0.85rem;
+      cursor: pointer;
+      transition: all 0.2s;
+      white-space: nowrap;
+    }
+
+    .round-tab:hover {
+      background: #2d2d44;
+      color: #fff;
+    }
+
+    .round-tab.active {
+      background: #4a4a6a;
+      border-color: #6a6a8a;
+      color: #fff;
+    }
+
+    .round-tab.empty {
+      opacity: 0.5;
+    }
+
+    .round-tab .dot {
+      display: inline-block;
+      width: 6px;
+      height: 6px;
+      background: #5a5;
+      border-radius: 50%;
+      margin-left: 6px;
+    }
+
+    .round-tab.empty .dot {
+      background: #555;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px;
+      margin-bottom: 20px;
+    }
+
+    @media (max-width: 900px) {
+      .grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .llm-card {
+      background: #252538;
+      border-radius: 10px;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .llm-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+
+    .llm-name {
+      font-weight: 600;
+      font-size: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .llm-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+    }
+
+    .chatgpt .llm-dot { background: #10a37f; }
+    .gemini .llm-dot { background: #4285f4; }
+    .claude .llm-dot { background: #d4a574; }
+    .grok .llm-dot { background: #1da1f2; }
+
+    .copy-btn {
+      background: #3d3d54;
+      color: #aaa;
+      padding: 6px 12px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 0.8rem;
+      transition: all 0.2s;
+    }
+
+    .copy-btn:hover {
+      background: #4d4d64;
+      color: #fff;
+    }
+
+    .copy-btn.copied {
+      background: #2a5c2a;
+      color: #8f8;
+    }
+
+    textarea {
+      width: 100%;
+      height: 180px;
+      background: #1a1a2e;
+      border: 1px solid #3d3d54;
+      border-radius: 6px;
+      padding: 12px;
+      color: #ddd;
+      font-family: inherit;
+      font-size: 0.9rem;
+      resize: vertical;
+      transition: border-color 0.2s;
+    }
+
+    textarea:focus {
+      outline: none;
+      border-color: #5d5d74;
+    }
+
+    textarea::placeholder {
+      color: #666;
+    }
+
+    .comment-section {
+      background: #252538;
+      border-radius: 10px;
+      padding: 16px;
+      margin-bottom: 20px;
+    }
+
+    .comment-section .llm-name {
+      margin-bottom: 10px;
+    }
+
+    .comment-section textarea {
+      height: 120px;
+    }
+
+    .generate-section {
+      background: #252538;
+      border-radius: 10px;
+      padding: 20px;
+    }
+
+    .generate-section h2 {
+      font-size: 1rem;
+      font-weight: 600;
+      margin-bottom: 16px;
+      color: #aaa;
+    }
+
+    .generate-buttons {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+    }
+
+    @media (max-width: 700px) {
+      .generate-buttons {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    .generate-btn {
+      padding: 14px 20px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 0.95rem;
+      font-weight: 500;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .generate-btn .dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+    }
+
+    .generate-btn.chatgpt {
+      background: linear-gradient(135deg, #10a37f 0%, #0d8a6a 100%);
+      color: #fff;
+    }
+
+    .generate-btn.gemini {
+      background: linear-gradient(135deg, #4285f4 0%, #3367d6 100%);
+      color: #fff;
+    }
+
+    .generate-btn.claude {
+      background: linear-gradient(135deg, #d4a574 0%, #b8956a 100%);
+      color: #1a1a2e;
+    }
+
+    .generate-btn.grok {
+      background: linear-gradient(135deg, #1da1f2 0%, #0d8bd9 100%);
+      color: #fff;
+    }
+
+    .generate-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    }
+
+    .generate-btn.copied {
+      background: #2a5c2a !important;
+      color: #8f8 !important;
+    }
+
+    .generate-btn.sent {
+      opacity: 0.6;
+      position: relative;
+    }
+
+    .generate-btn.sent::after {
+      content: '✓';
+      position: absolute;
+      top: -6px;
+      right: -6px;
+      background: #2a5c2a;
+      color: #8f8;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      font-size: 11px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .generate-btn.sent:hover {
+      opacity: 0.8;
+    }
+
+    .generate-btn .readiness {
+      font-size: 0.75rem;
+      opacity: 0.8;
+      margin-left: 4px;
+    }
+
+    .generate-btn.not-ready {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    .generate-btn.not-ready:hover {
+      transform: none;
+      box-shadow: none;
+    }
+
+    .generate-btn.partial {
+      opacity: 0.75;
+    }
+
+    /* Hidden file input for import */
+    #importInput {
+      display: none;
+    }
+
+    .preamble-section {
+      margin-bottom: 20px;
+    }
+
+    .preamble-toggle {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      cursor: pointer;
+      color: #888;
+      font-size: 0.9rem;
+      margin-bottom: 10px;
+    }
+
+    .preamble-toggle:hover {
+      color: #aaa;
+    }
+
+    .preamble-content {
+      display: none;
+    }
+
+    .preamble-content.visible {
+      display: block;
+    }
+
+    .preamble-content textarea {
+      height: 80px;
+    }
+
+    .toast {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background: #2a5c2a;
+      color: #8f8;
+      padding: 12px 20px;
+      border-radius: 8px;
+      font-size: 0.9rem;
+      opacity: 0;
+      transform: translateY(10px);
+      transition: all 0.3s;
+      pointer-events: none;
+      z-index: 1000;
+    }
+
+    .toast.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .char-count {
+      font-size: 0.75rem;
+      color: #666;
+      text-align: right;
+      margin-top: 4px;
+    }
+
+    .delete-round {
+      margin-left: auto;
+      padding-left: 16px;
+    }
+
+    .delete-round-btn {
+      padding: 6px 12px;
+      background: transparent;
+      border: 1px solid #5c2a2a;
+      border-radius: 4px;
+      color: #f88;
+      font-size: 0.8rem;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .delete-round-btn:hover {
+      background: #5c2a2a;
+    }
+
+    .session-info {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .session-name {
+      font-size: 0.85rem;
+      color: #888;
+      cursor: pointer;
+      padding: 4px 8px;
+      border-radius: 4px;
+      transition: all 0.2s;
+    }
+
+    .session-name:hover {
+      background: #2d2d44;
+      color: #aaa;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div class="session-info">
+        <h1>Prompt Stitch</h1>
+        <span class="session-name" onclick="renameSession()" title="Click to rename session" id="sessionName">Untitled Session</span>
+      </div>
+      <div class="header-actions">
+        <button class="btn btn-primary" onclick="newRound()">+ New Round</button>
+        <button class="btn btn-secondary" onclick="document.getElementById('importInput').click()">Import</button>
+        <button class="btn btn-secondary" onclick="exportSession()">Export</button>
+        <button class="btn btn-danger" onclick="clearAll()">Clear All</button>
+        <input type="file" id="importInput" accept=".md,.txt" onchange="importSession(event)">
+      </div>
+    </header>
+
+    <div class="round-nav">
+      <span class="round-nav-label">Rounds:</span>
+      <div class="round-tabs" id="roundTabs">
+        <!-- Tabs generated by JS -->
+      </div>
+      <div class="delete-round">
+        <button class="delete-round-btn" onclick="deleteCurrentRound()">Delete Round</button>
+      </div>
+    </div>
+
+    <div class="preamble-section">
+      <div class="preamble-toggle" onclick="togglePreamble()">
+        <span id="preambleArrow">▶</span> Customize Preamble
+      </div>
+      <div class="preamble-content" id="preambleContent">
+        <textarea id="preamble" placeholder="Preamble text that appears before LLM responses..." oninput="saveCurrentRound()">Other LLMs have responded to the same context/question I've given you. Here are their responses:</textarea>
+      </div>
+    </div>
+
+    <div class="grid">
+      <div class="llm-card chatgpt">
+        <div class="llm-header">
+          <div class="llm-name"><span class="llm-dot"></span>ChatGPT</div>
+          <button class="copy-btn" onclick="copyResponse('chatgpt')">Copy</button>
+        </div>
+        <textarea id="chatgpt" placeholder="Paste ChatGPT's response here..." oninput="saveCurrentRound(); updateCharCount('chatgpt'); updateReadinessIndicators()"></textarea>
+        <div class="char-count" id="chatgpt-count">0 chars</div>
+      </div>
+
+      <div class="llm-card gemini">
+        <div class="llm-header">
+          <div class="llm-name"><span class="llm-dot"></span>Gemini</div>
+          <button class="copy-btn" onclick="copyResponse('gemini')">Copy</button>
+        </div>
+        <textarea id="gemini" placeholder="Paste Gemini's response here..." oninput="saveCurrentRound(); updateCharCount('gemini'); updateReadinessIndicators()"></textarea>
+        <div class="char-count" id="gemini-count">0 chars</div>
+      </div>
+
+      <div class="llm-card claude">
+        <div class="llm-header">
+          <div class="llm-name"><span class="llm-dot"></span>Claude</div>
+          <button class="copy-btn" onclick="copyResponse('claude')">Copy</button>
+        </div>
+        <textarea id="claude" placeholder="Paste Claude's response here..." oninput="saveCurrentRound(); updateCharCount('claude'); updateReadinessIndicators()"></textarea>
+        <div class="char-count" id="claude-count">0 chars</div>
+      </div>
+
+      <div class="llm-card grok">
+        <div class="llm-header">
+          <div class="llm-name"><span class="llm-dot"></span>Grok</div>
+          <button class="copy-btn" onclick="copyResponse('grok')">Copy</button>
+        </div>
+        <textarea id="grok" placeholder="Paste Grok's response here..." oninput="saveCurrentRound(); updateCharCount('grok'); updateReadinessIndicators()"></textarea>
+        <div class="char-count" id="grok-count">0 chars</div>
+      </div>
+    </div>
+
+    <div class="comment-section">
+      <div class="llm-name">📝 Your Commentary</div>
+      <textarea id="commentary" placeholder="Add your thoughts, observations, or follow-up questions..." oninput="saveCurrentRound(); updateCharCount('commentary')"></textarea>
+      <div class="char-count" id="commentary-count">0 chars</div>
+    </div>
+
+    <div class="generate-section">
+      <h2>Generate Composite Prompt For:</h2>
+      <div class="generate-buttons">
+        <button class="generate-btn chatgpt" onclick="generateFor('chatgpt')">
+          <span class="dot" style="background:#fff"></span> ChatGPT
+        </button>
+        <button class="generate-btn gemini" onclick="generateFor('gemini')">
+          <span class="dot" style="background:#fff"></span> Gemini
+        </button>
+        <button class="generate-btn claude" onclick="generateFor('claude')">
+          <span class="dot" style="background:#fff"></span> Claude
+        </button>
+        <button class="generate-btn grok" onclick="generateFor('grok')">
+          <span class="dot" style="background:#fff"></span> Grok
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast">Copied to clipboard!</div>
+
+  <script>
+    const llms = ['chatgpt', 'gemini', 'claude', 'grok'];
+    const displayNames = {
+      chatgpt: 'ChatGPT',
+      gemini: 'Gemini',
+      claude: 'Claude',
+      grok: 'Grok'
+    };
+
+    // Session state
+    let session = {
+      name: 'Untitled Session',
+      preamble: 'Other LLMs have responded to the same context/question I\'ve given you. Here are their responses:',
+      currentRound: 1,
+      rounds: {}
+    };
+
+    // Load from localStorage on page load
+    document.addEventListener('DOMContentLoaded', () => {
+      loadSession();
+      renderRoundTabs();
+      loadRound(session.currentRound);
+    });
+
+    function loadSession() {
+      const saved = localStorage.getItem('promptStitchSession');
+      if (saved) {
+        session = JSON.parse(saved);
+        // Ensure rounds object exists
+        if (!session.rounds) session.rounds = {};
+        // Ensure at least round 1 exists
+        if (!session.rounds[1]) {
+          session.rounds[1] = createEmptyRound();
+        }
+      } else {
+        // Initialize with round 1
+        session.rounds[1] = createEmptyRound();
+      }
+      document.getElementById('sessionName').textContent = session.name;
+      document.getElementById('preamble').value = session.preamble;
+    }
+
+    function saveSession() {
+      localStorage.setItem('promptStitchSession', JSON.stringify(session));
+    }
+
+    function createEmptyRound() {
+      return {
+        chatgpt: '',
+        gemini: '',
+        claude: '',
+        grok: '',
+        commentary: '',
+        sent: { chatgpt: false, gemini: false, claude: false, grok: false }
+      };
+    }
+
+    function isRoundEmpty(roundData) {
+      if (!roundData) return true;
+      return !roundData.chatgpt && !roundData.gemini && !roundData.claude && !roundData.grok && !roundData.commentary;
+    }
+
+    function saveCurrentRound() {
+      const existingRound = session.rounds[session.currentRound] || createEmptyRound();
+      const roundData = {
+        chatgpt: document.getElementById('chatgpt').value,
+        gemini: document.getElementById('gemini').value,
+        claude: document.getElementById('claude').value,
+        grok: document.getElementById('grok').value,
+        commentary: document.getElementById('commentary').value,
+        sent: existingRound.sent || { chatgpt: false, gemini: false, claude: false, grok: false }
+      };
+      session.rounds[session.currentRound] = roundData;
+      session.preamble = document.getElementById('preamble').value;
+      saveSession();
+      renderRoundTabs(); // Update tab indicators
+    }
+
+    function loadRound(roundNum) {
+      session.currentRound = roundNum;
+      const roundData = session.rounds[roundNum] || createEmptyRound();
+
+      document.getElementById('chatgpt').value = roundData.chatgpt || '';
+      document.getElementById('gemini').value = roundData.gemini || '';
+      document.getElementById('claude').value = roundData.claude || '';
+      document.getElementById('grok').value = roundData.grok || '';
+      document.getElementById('commentary').value = roundData.commentary || '';
+
+      // Update char counts
+      llms.forEach(updateCharCount);
+      updateCharCount('commentary');
+
+      // Update sent button states
+      updateSentButtons(roundData.sent || {});
+
+      // Update readiness indicators
+      updateReadinessIndicators();
+
+      saveSession();
+      renderRoundTabs();
+    }
+
+    function updateSentButtons(sentStatus) {
+      llms.forEach(llm => {
+        const btn = document.querySelector(`.generate-btn.${llm}`);
+        if (sentStatus[llm]) {
+          btn.classList.add('sent');
+        } else {
+          btn.classList.remove('sent');
+        }
+      });
+    }
+
+    function getReadinessFor(targetLlm) {
+      const otherLlms = llms.filter(llm => llm !== targetLlm);
+      const filled = otherLlms.filter(llm => document.getElementById(llm).value.trim().length > 0);
+      const hasCommentary = document.getElementById('commentary').value.trim().length > 0;
+
+      return {
+        filledCount: filled.length,
+        totalCount: otherLlms.length,
+        filledLlms: filled,
+        missingLlms: otherLlms.filter(llm => !filled.includes(llm)),
+        hasCommentary: hasCommentary
+      };
+    }
+
+    function updateReadinessIndicators() {
+      llms.forEach(llm => {
+        const btn = document.querySelector(`.generate-btn.${llm}`);
+        const readiness = getReadinessFor(llm);
+
+        // Remove existing classes
+        btn.classList.remove('not-ready', 'partial');
+
+        // Update button content with readiness indicator
+        const isSent = btn.classList.contains('sent');
+        if (!isSent) {
+          btn.innerHTML = `<span class="dot" style="background:#fff"></span> ${displayNames[llm]} <span class="readiness">(${readiness.filledCount}/${readiness.totalCount})</span>`;
+        }
+
+        // Add appropriate class
+        if (readiness.filledCount === 0) {
+          btn.classList.add('not-ready');
+        } else if (readiness.filledCount < readiness.totalCount) {
+          btn.classList.add('partial');
+        }
+      });
+    }
+
+    function renderRoundTabs() {
+      const container = document.getElementById('roundTabs');
+      const roundNumbers = Object.keys(session.rounds).map(Number).sort((a, b) => a - b);
+
+      container.innerHTML = roundNumbers.map(num => {
+        const isEmpty = isRoundEmpty(session.rounds[num]);
+        const isActive = num === session.currentRound;
+        return `
+          <div class="round-tab ${isActive ? 'active' : ''} ${isEmpty ? 'empty' : ''}"
+               onclick="loadRound(${num})">
+            Round ${num}
+            <span class="dot"></span>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function newRound() {
+      // Find the highest round number and add 1
+      const roundNumbers = Object.keys(session.rounds).map(Number);
+      const newRoundNum = Math.max(...roundNumbers) + 1;
+
+      session.rounds[newRoundNum] = createEmptyRound();
+      session.currentRound = newRoundNum;
+      saveSession();
+
+      loadRound(newRoundNum);
+      showToast(`Created Round ${newRoundNum}`);
+    }
+
+    function deleteCurrentRound() {
+      const roundNumbers = Object.keys(session.rounds).map(Number).sort((a, b) => a - b);
+
+      if (roundNumbers.length <= 1) {
+        showToast('Cannot delete the only round');
+        return;
+      }
+
+      if (!confirm(`Delete Round ${session.currentRound}?`)) {
+        return;
+      }
+
+      const currentIdx = roundNumbers.indexOf(session.currentRound);
+      delete session.rounds[session.currentRound];
+
+      // Navigate to adjacent round
+      const remainingRounds = Object.keys(session.rounds).map(Number).sort((a, b) => a - b);
+      const newCurrent = remainingRounds[Math.min(currentIdx, remainingRounds.length - 1)];
+
+      loadRound(newCurrent);
+      showToast(`Deleted Round ${session.currentRound}`);
+    }
+
+    function updateCharCount(id) {
+      const textarea = document.getElementById(id);
+      const countEl = document.getElementById(id + '-count');
+      if (textarea && countEl) {
+        countEl.textContent = textarea.value.length.toLocaleString() + ' chars';
+      }
+    }
+
+    function generateFor(targetLlm) {
+      const preamble = document.getElementById('preamble').value;
+      const commentary = document.getElementById('commentary').value;
+      const readiness = getReadinessFor(targetLlm);
+
+      // Check if completely empty
+      if (readiness.filledCount === 0) {
+        showToast('No responses to include!');
+        return;
+      }
+
+      // Warn if missing some responses or commentary
+      if (readiness.filledCount < readiness.totalCount || !readiness.hasCommentary) {
+        const missingItems = [];
+
+        if (readiness.missingLlms.length > 0) {
+          const missingNames = readiness.missingLlms.map(llm => displayNames[llm]).join(', ');
+          missingItems.push(`LLM responses: ${missingNames}`);
+        }
+
+        if (!readiness.hasCommentary) {
+          missingItems.push('Your commentary');
+        }
+
+        const warningMsg = `The following fields are empty:\n\n• ${missingItems.join('\n• ')}\n\nContinue anyway?`;
+
+        if (!confirm(warningMsg)) {
+          return;
+        }
+      }
+
+      // Get responses from the OTHER LLMs
+      const otherResponses = llms
+        .filter(llm => llm !== targetLlm)
+        .map(llm => {
+          const response = document.getElementById(llm).value.trim();
+          if (response) {
+            return `**${displayNames[llm]}:**\n${response}`;
+          }
+          return null;
+        })
+        .filter(Boolean);
+
+      // Build the composite prompt
+      let composite = '';
+
+      if (preamble.trim()) {
+        composite += preamble.trim() + '\n\n';
+      }
+
+      composite += otherResponses.join('\n\n---\n\n');
+
+      if (commentary.trim()) {
+        composite += '\n\n---\n\n**My Commentary:**\n' + commentary.trim();
+      }
+
+      // Copy to clipboard
+      navigator.clipboard.writeText(composite).then(() => {
+        showToast(`Copied composite prompt for ${displayNames[targetLlm]}!`);
+
+        // Mark as sent persistently
+        if (!session.rounds[session.currentRound].sent) {
+          session.rounds[session.currentRound].sent = { chatgpt: false, gemini: false, claude: false, grok: false };
+        }
+        session.rounds[session.currentRound].sent[targetLlm] = true;
+        saveSession();
+
+        // Visual feedback on button
+        const btn = document.querySelector(`.generate-btn.${targetLlm}`);
+        btn.classList.add('copied');
+        btn.textContent = '✓ Copied!';
+        setTimeout(() => {
+          btn.classList.remove('copied');
+          btn.classList.add('sent');
+          // Restore with readiness indicator
+          const r = getReadinessFor(targetLlm);
+          btn.innerHTML = `<span class="dot" style="background:#fff"></span> ${displayNames[targetLlm]} <span class="readiness">(${r.filledCount}/${r.totalCount})</span>`;
+        }, 2000);
+      });
+    }
+
+    function copyResponse(llm) {
+      const text = document.getElementById(llm).value;
+      navigator.clipboard.writeText(text).then(() => {
+        const btn = document.querySelector(`.llm-card.${llm} .copy-btn`);
+        btn.classList.add('copied');
+        btn.textContent = '✓ Copied';
+        setTimeout(() => {
+          btn.classList.remove('copied');
+          btn.textContent = 'Copy';
+        }, 2000);
+      });
+    }
+
+    function clearAll() {
+      if (confirm('Clear entire session and start fresh?')) {
+        session = {
+          name: 'Untitled Session',
+          preamble: 'Other LLMs have responded to the same context/question I\'ve given you. Here are their responses:',
+          currentRound: 1,
+          rounds: { 1: createEmptyRound() }
+        };
+        saveSession();
+        document.getElementById('sessionName').textContent = session.name;
+        document.getElementById('preamble').value = session.preamble;
+        loadRound(1);
+        showToast('Session cleared');
+      }
+    }
+
+    function renameSession() {
+      const newName = prompt('Session name:', session.name);
+      if (newName && newName.trim()) {
+        session.name = newName.trim();
+        document.getElementById('sessionName').textContent = session.name;
+        saveSession();
+      }
+    }
+
+    function exportSession() {
+      const roundNumbers = Object.keys(session.rounds).map(Number).sort((a, b) => a - b);
+
+      let markdown = `# ${session.name}\n\n`;
+      markdown += `Exported: ${new Date().toLocaleString()}\n\n`;
+      markdown += `---\n\n`;
+
+      roundNumbers.forEach(num => {
+        const round = session.rounds[num];
+        if (isRoundEmpty(round)) return;
+
+        markdown += `## Round ${num}\n\n`;
+
+        llms.forEach(llm => {
+          if (round[llm]) {
+            markdown += `### ${displayNames[llm]}\n\n${round[llm]}\n\n`;
+          }
+        });
+
+        if (round.commentary) {
+          markdown += `### My Commentary\n\n${round.commentary}\n\n`;
+        }
+
+        markdown += `---\n\n`;
+      });
+
+      // Download as file
+      const blob = new Blob([markdown], { type: 'text/markdown' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `${session.name.replace(/[^a-z0-9]/gi, '-')}-export.md`;
+      a.click();
+      URL.revokeObjectURL(url);
+
+      showToast('Exported to markdown file');
+    }
+
+    function importSession(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        const content = e.target.result;
+
+        try {
+          // Parse the markdown export format
+          const importedSession = parseExportedMarkdown(content);
+
+          if (Object.keys(importedSession.rounds).length === 0) {
+            showToast('No valid rounds found in file');
+            return;
+          }
+
+          // Confirm before replacing current session
+          if (!confirm(`Import "${importedSession.name}" with ${Object.keys(importedSession.rounds).length} round(s)? This will replace your current session.`)) {
+            return;
+          }
+
+          session = importedSession;
+          saveSession();
+          document.getElementById('sessionName').textContent = session.name;
+          document.getElementById('preamble').value = session.preamble;
+          loadRound(session.currentRound);
+          showToast(`Imported ${Object.keys(session.rounds).length} round(s)`);
+        } catch (err) {
+          console.error('Import error:', err);
+          showToast('Failed to parse file');
+        }
+      };
+      reader.readAsText(file);
+
+      // Reset the input so the same file can be imported again
+      event.target.value = '';
+    }
+
+    function parseExportedMarkdown(content) {
+      const lines = content.split('\n');
+
+      // Extract session name from first heading
+      let name = 'Imported Session';
+      const titleMatch = content.match(/^# (.+)$/m);
+      if (titleMatch) {
+        name = titleMatch[1].trim();
+      }
+
+      const imported = {
+        name: name,
+        preamble: 'Other LLMs have responded to the same context/question I\'ve given you. Here are their responses:',
+        currentRound: 1,
+        rounds: {}
+      };
+
+      // Parse rounds
+      const roundRegex = /## Round (\d+)/g;
+      const sectionRegex = /### (ChatGPT|Gemini|Claude|Grok|My Commentary)\n\n([\s\S]*?)(?=\n### |\n## |\n---|\n*$)/g;
+
+      let roundMatch;
+      const roundPositions = [];
+
+      while ((roundMatch = roundRegex.exec(content)) !== null) {
+        roundPositions.push({
+          num: parseInt(roundMatch[1]),
+          start: roundMatch.index
+        });
+      }
+
+      roundPositions.forEach((pos, idx) => {
+        const roundNum = pos.num;
+        const start = pos.start;
+        const end = idx < roundPositions.length - 1 ? roundPositions[idx + 1].start : content.length;
+        const roundContent = content.slice(start, end);
+
+        const round = createEmptyRound();
+
+        let sectionMatch;
+        const sectionRegexLocal = /### (ChatGPT|Gemini|Claude|Grok|My Commentary)\n\n([\s\S]*?)(?=\n### |\n## |\n---|\s*$)/g;
+
+        while ((sectionMatch = sectionRegexLocal.exec(roundContent)) !== null) {
+          const sectionName = sectionMatch[1];
+          const sectionContent = sectionMatch[2].trim();
+
+          if (sectionName === 'ChatGPT') round.chatgpt = sectionContent;
+          else if (sectionName === 'Gemini') round.gemini = sectionContent;
+          else if (sectionName === 'Claude') round.claude = sectionContent;
+          else if (sectionName === 'Grok') round.grok = sectionContent;
+          else if (sectionName === 'My Commentary') round.commentary = sectionContent;
+        }
+
+        imported.rounds[roundNum] = round;
+      });
+
+      // Set current round to highest
+      const roundNums = Object.keys(imported.rounds).map(Number);
+      if (roundNums.length > 0) {
+        imported.currentRound = Math.max(...roundNums);
+      } else {
+        imported.rounds[1] = createEmptyRound();
+        imported.currentRound = 1;
+      }
+
+      return imported;
+    }
+
+    function togglePreamble() {
+      const content = document.getElementById('preambleContent');
+      const arrow = document.getElementById('preambleArrow');
+      content.classList.toggle('visible');
+      arrow.textContent = content.classList.contains('visible') ? '▼' : '▶';
+    }
+
+    function showToast(message) {
+      const toast = document.getElementById('toast');
+      toast.textContent = message;
+      toast.classList.add('visible');
+      setTimeout(() => {
+        toast.classList.remove('visible');
+      }, 2000);
+    }
+  </script>
+</body>
+</html>
