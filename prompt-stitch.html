@@ -406,6 +406,50 @@
       height: 80px;
     }
 
+    .identities-section {
+      margin-bottom: 20px;
+    }
+
+    .identities-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+      margin-top: 10px;
+    }
+
+    @media (max-width: 700px) {
+      .identities-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .identity-item {
+      background: #1a1a2e;
+      border: 1px solid #3d3d54;
+      border-radius: 6px;
+      padding: 10px;
+    }
+
+    .identity-label {
+      font-size: 0.85rem;
+      font-weight: 500;
+      margin-bottom: 6px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .identity-label .llm-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+    }
+
+    .identity-item textarea {
+      height: 60px;
+      font-size: 0.85rem;
+    }
+
     .toast {
       position: fixed;
       bottom: 20px;
@@ -506,7 +550,33 @@
         <span id="preambleArrow">▶</span> Customize Preamble
       </div>
       <div class="preamble-content" id="preambleContent">
-        <textarea id="preamble" placeholder="Preamble text that appears before LLM responses..." oninput="saveCurrentRound()">Other LLMs have responded to the same context/question I've given you. Here are their responses:</textarea>
+        <textarea id="preamble" placeholder="Preamble text that appears before LLM responses..." oninput="saveIdentities()">Other LLMs have responded to the same context/question I've given you. Here are their responses:</textarea>
+      </div>
+    </div>
+
+    <div class="identities-section">
+      <div class="preamble-toggle" onclick="toggleIdentities()">
+        <span id="identitiesArrow">▶</span> LLM Identities (role descriptions)
+      </div>
+      <div class="preamble-content" id="identitiesContent">
+        <div class="identities-grid">
+          <div class="identity-item">
+            <div class="identity-label"><span class="llm-dot" style="background:#10a37f"></span> ChatGPT</div>
+            <textarea id="identity-chatgpt" oninput="saveIdentities()" placeholder="ChatGPT's role...">You are ChatGPT, known for broad knowledge, clear explanations, and balanced reasoning.</textarea>
+          </div>
+          <div class="identity-item">
+            <div class="identity-label"><span class="llm-dot" style="background:#4285f4"></span> Gemini</div>
+            <textarea id="identity-gemini" oninput="saveIdentities()" placeholder="Gemini's role...">You are Gemini, known for multimodal understanding, research synthesis, and Google ecosystem integration.</textarea>
+          </div>
+          <div class="identity-item">
+            <div class="identity-label"><span class="llm-dot" style="background:#d4a574"></span> Claude</div>
+            <textarea id="identity-claude" oninput="saveIdentities()" placeholder="Claude's role...">You are Claude, known for nuanced analysis, careful reasoning, and thoughtful long-form responses.</textarea>
+          </div>
+          <div class="identity-item">
+            <div class="identity-label"><span class="llm-dot" style="background:#1da1f2"></span> Grok</div>
+            <textarea id="identity-grok" oninput="saveIdentities()" placeholder="Grok's role...">You are Grok, known for creative thinking, wit, and real-time awareness via X/Twitter.</textarea>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -584,10 +654,19 @@
       grok: 'Grok'
     };
 
+    // Default identities
+    const defaultIdentities = {
+      chatgpt: 'You are ChatGPT, known for broad knowledge, clear explanations, and balanced reasoning.',
+      gemini: 'You are Gemini, known for multimodal understanding, research synthesis, and Google ecosystem integration.',
+      claude: 'You are Claude, known for nuanced analysis, careful reasoning, and thoughtful long-form responses.',
+      grok: 'You are Grok, known for creative thinking, wit, and real-time awareness via X/Twitter.'
+    };
+
     // Session state
     let session = {
       name: 'Untitled Session',
       preamble: 'Other LLMs have responded to the same context/question I\'ve given you. Here are their responses:',
+      identities: { ...defaultIdentities },
       currentRound: 1,
       rounds: {}
     };
@@ -609,12 +688,24 @@
         if (!session.rounds[1]) {
           session.rounds[1] = createEmptyRound();
         }
+        // Ensure identities exist
+        if (!session.identities) {
+          session.identities = { ...defaultIdentities };
+        }
       } else {
         // Initialize with round 1
         session.rounds[1] = createEmptyRound();
       }
       document.getElementById('sessionName').textContent = session.name;
       document.getElementById('preamble').value = session.preamble;
+
+      // Load identities into textareas
+      llms.forEach(llm => {
+        const textarea = document.getElementById(`identity-${llm}`);
+        if (textarea) {
+          textarea.value = session.identities[llm] || defaultIdentities[llm];
+        }
+      });
     }
 
     function saveSession() {
@@ -832,6 +923,12 @@
       // Build the composite prompt
       let composite = '';
 
+      // Add identity preamble for this LLM
+      const identity = session.identities[targetLlm] || defaultIdentities[targetLlm];
+      if (identity.trim()) {
+        composite += identity.trim() + '\n\n';
+      }
+
       if (preamble.trim()) {
         composite += preamble.trim() + '\n\n';
       }
@@ -841,6 +938,9 @@
       if (commentary.trim()) {
         composite += '\n\n---\n\n**My Commentary:**\n' + commentary.trim();
       }
+
+      // Add closing reminder of their role
+      composite += `\n\n---\n\nPlease respond as ${displayNames[targetLlm]}, bringing your unique perspective to this discussion.`;
 
       // Copy to clipboard
       navigator.clipboard.writeText(composite).then(() => {
@@ -885,12 +985,20 @@
         session = {
           name: 'Untitled Session',
           preamble: 'Other LLMs have responded to the same context/question I\'ve given you. Here are their responses:',
+          identities: { ...defaultIdentities },
           currentRound: 1,
           rounds: { 1: createEmptyRound() }
         };
         saveSession();
         document.getElementById('sessionName').textContent = session.name;
         document.getElementById('preamble').value = session.preamble;
+        // Reset identity textareas
+        llms.forEach(llm => {
+          const textarea = document.getElementById(`identity-${llm}`);
+          if (textarea) {
+            textarea.value = defaultIdentities[llm];
+          }
+        });
         loadRound(1);
         showToast('Session cleared');
       }
@@ -966,9 +1074,20 @@
           }
 
           session = importedSession;
+          // Ensure identities exist
+          if (!session.identities) {
+            session.identities = { ...defaultIdentities };
+          }
           saveSession();
           document.getElementById('sessionName').textContent = session.name;
           document.getElementById('preamble').value = session.preamble;
+          // Load identities into textareas
+          llms.forEach(llm => {
+            const textarea = document.getElementById(`identity-${llm}`);
+            if (textarea) {
+              textarea.value = session.identities[llm] || defaultIdentities[llm];
+            }
+          });
           loadRound(session.currentRound);
           showToast(`Imported ${Object.keys(session.rounds).length} round(s)`);
         } catch (err) {
@@ -1055,6 +1174,24 @@
       const arrow = document.getElementById('preambleArrow');
       content.classList.toggle('visible');
       arrow.textContent = content.classList.contains('visible') ? '▼' : '▶';
+    }
+
+    function toggleIdentities() {
+      const content = document.getElementById('identitiesContent');
+      const arrow = document.getElementById('identitiesArrow');
+      content.classList.toggle('visible');
+      arrow.textContent = content.classList.contains('visible') ? '▼' : '▶';
+    }
+
+    function saveIdentities() {
+      session.preamble = document.getElementById('preamble').value;
+      llms.forEach(llm => {
+        const textarea = document.getElementById(`identity-${llm}`);
+        if (textarea) {
+          session.identities[llm] = textarea.value;
+        }
+      });
+      saveSession();
     }
 
     function showToast(message) {
