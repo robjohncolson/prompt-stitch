@@ -174,6 +174,16 @@
       background: var(--theme-accent);
     }
 
+    .btn-secondary:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+      background: var(--theme-bg);
+    }
+
+    .btn-secondary:disabled:hover {
+      background: var(--theme-bg);
+    }
+
     .btn-danger {
       background: #5c2a2a;
       color: #f88;
@@ -181,6 +191,67 @@
 
     .btn-danger:hover {
       background: #7c3a3a;
+    }
+
+    /* Export Toggle */
+    .export-toggle {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.8rem;
+      color: #888;
+    }
+
+    .export-toggle label {
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .toggle-switch {
+      position: relative;
+      display: inline-block;
+      width: 36px;
+      height: 20px;
+      cursor: pointer;
+    }
+
+    .toggle-switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+
+    .toggle-slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: #3a3a4a;
+      transition: 0.2s;
+      border-radius: 20px;
+    }
+
+    .toggle-slider:before {
+      position: absolute;
+      content: "";
+      height: 14px;
+      width: 14px;
+      left: 3px;
+      bottom: 3px;
+      background-color: #888;
+      transition: 0.2s;
+      border-radius: 50%;
+    }
+
+    .toggle-switch input:checked + .toggle-slider {
+      background-color: var(--theme-accent);
+    }
+
+    .toggle-switch input:checked + .toggle-slider:before {
+      transform: translateX(16px);
+      background-color: #fff;
     }
 
     /* Round Navigation */
@@ -1155,7 +1226,15 @@
         </div>
         <button class="btn btn-primary" onclick="newRound()">+ New Round</button>
         <button class="btn btn-secondary" onclick="document.getElementById('importInput').click()">Import</button>
+        <div class="export-toggle">
+          <span>Current only</span>
+          <label class="toggle-switch" for="exportCurrentOnly">
+            <input type="checkbox" id="exportCurrentOnly" onchange="updateCopyButtonState()">
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
         <button class="btn btn-secondary" onclick="exportSession()">Export</button>
+        <button class="btn btn-secondary" id="copyCurrentBtn" onclick="copyCurrentRound()" disabled>Copy</button>
         <button class="btn btn-danger" onclick="clearAll()">Clear All</button>
         <input type="file" id="importInput" accept=".md,.txt" onchange="importSession(event)">
       </div>
@@ -2462,14 +2541,21 @@
     }
 
     function exportSession() {
-      const roundNumbers = Object.keys(session.rounds).map(Number).sort((a, b) => a - b);
+      const exportCurrentOnly = document.getElementById('exportCurrentOnly').checked;
+      const allRoundNumbers = Object.keys(session.rounds).map(Number).sort((a, b) => a - b);
+
+      // If exporting current only, just use the current round
+      const roundNumbers = exportCurrentOnly ? [session.currentRound] : allRoundNumbers;
 
       let markdown = `# ${session.name}\n\n`;
       markdown += `Exported: ${new Date().toLocaleString()}\n\n`;
+      if (exportCurrentOnly) {
+        markdown += `*Exported current round only (Round ${session.currentRound})*\n\n`;
+      }
       markdown += `---\n\n`;
 
-      // Export Round 0 if it has content
-      if (session.roundZero && session.roundZero.prompt) {
+      // Export Round 0 if it has content (only when exporting all or when current round is 0)
+      if (session.roundZero && session.roundZero.prompt && (!exportCurrentOnly || session.currentRound === 0)) {
         markdown += `## Round 0 (Initial Prompt)\n\n`;
         if (session.roundZero.timestamp) {
           const ts = new Date(session.roundZero.timestamp);
@@ -2480,6 +2566,7 @@
       }
 
       roundNumbers.forEach(num => {
+        if (num === 0) return; // Round 0 handled separately above
         const round = session.rounds[num];
         if (isRoundEmpty(round)) return;
 
@@ -2503,11 +2590,58 @@
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
-      a.download = `${session.name.replace(/[^a-z0-9]/gi, '-')}-export.md`;
+      const suffix = exportCurrentOnly ? `-round-${session.currentRound}` : '-export';
+      a.download = `${session.name.replace(/[^a-z0-9]/gi, '-')}${suffix}.md`;
       a.click();
       URL.revokeObjectURL(url);
 
-      showToast('Exported to markdown file');
+      showToast(exportCurrentOnly ? `Exported Round ${session.currentRound} to markdown` : 'Exported to markdown file');
+    }
+
+    function updateCopyButtonState() {
+      const exportCurrentOnly = document.getElementById('exportCurrentOnly').checked;
+      const copyBtn = document.getElementById('copyCurrentBtn');
+      copyBtn.disabled = !exportCurrentOnly;
+    }
+
+    function copyCurrentRound() {
+      let markdown = `# ${session.name} - Round ${session.currentRound}\n\n`;
+      markdown += `Exported: ${new Date().toLocaleString()}\n\n`;
+      markdown += `---\n\n`;
+
+      // Include Round 0 if we're on it
+      if (session.currentRound === 0) {
+        if (session.roundZero && session.roundZero.prompt) {
+          markdown += `## Round 0 (Initial Prompt)\n\n`;
+          if (session.roundZero.timestamp) {
+            const ts = new Date(session.roundZero.timestamp);
+            markdown += `**Session Started:** ${ts.toLocaleString()}\n\n`;
+          }
+          markdown += `### Initial Prompt\n\n${session.roundZero.prompt}\n\n`;
+        }
+      } else {
+        const round = session.rounds[session.currentRound];
+        if (round && !isRoundEmpty(round)) {
+          markdown += `## Round ${session.currentRound}\n\n`;
+
+          llms.forEach(llm => {
+            if (round[llm]) {
+              markdown += `### ${displayNames[llm]}\n\n${round[llm]}\n\n`;
+            }
+          });
+
+          if (round.commentary) {
+            markdown += `### My Commentary\n\n${round.commentary}\n\n`;
+          }
+        }
+      }
+
+      navigator.clipboard.writeText(markdown).then(() => {
+        showToast(`Round ${session.currentRound} copied to clipboard`);
+      }).catch(err => {
+        showToast('Failed to copy to clipboard');
+        console.error('Clipboard error:', err);
+      });
     }
 
     function importSession(event) {
