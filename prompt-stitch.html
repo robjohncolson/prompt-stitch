@@ -11,12 +11,112 @@
       padding: 0;
     }
 
+    :root {
+      /* Default theme (purple) */
+      --theme-bg: #1a1a2e;
+      --theme-card: #252538;
+      --theme-accent: #4a4a6a;
+      --theme-accent-hover: #5a5a7a;
+      --theme-border: #3d3d54;
+      --theme-highlight: #6a6a8a;
+      --theme-name-color: #a8a8d8;
+    }
+
+    /* Theme: Indigo (default) */
+    body.theme-indigo {
+      --theme-bg: #1a1a2e;
+      --theme-card: #252538;
+      --theme-accent: #4a4a6a;
+      --theme-accent-hover: #5a5a7a;
+      --theme-border: #3d3d54;
+      --theme-highlight: #6a6a8a;
+      --theme-name-color: #a8a8d8;
+    }
+
+    /* Theme: Ocean */
+    body.theme-ocean {
+      --theme-bg: #0d1b2a;
+      --theme-card: #1b2838;
+      --theme-accent: #2a4a6a;
+      --theme-accent-hover: #3a5a7a;
+      --theme-border: #2a4a5a;
+      --theme-highlight: #4a8aba;
+      --theme-name-color: #7cb8d8;
+    }
+
+    /* Theme: Forest */
+    body.theme-forest {
+      --theme-bg: #1a2e1a;
+      --theme-card: #253825;
+      --theme-accent: #3a5a3a;
+      --theme-accent-hover: #4a6a4a;
+      --theme-border: #3d543d;
+      --theme-highlight: #5a8a5a;
+      --theme-name-color: #8ad88a;
+    }
+
+    /* Theme: Ember */
+    body.theme-ember {
+      --theme-bg: #2e1a1a;
+      --theme-card: #382525;
+      --theme-accent: #6a3a3a;
+      --theme-accent-hover: #7a4a4a;
+      --theme-border: #543d3d;
+      --theme-highlight: #a85a5a;
+      --theme-name-color: #d88a8a;
+    }
+
+    /* Theme: Gold */
+    body.theme-gold {
+      --theme-bg: #2e2a1a;
+      --theme-card: #383425;
+      --theme-accent: #6a5a3a;
+      --theme-accent-hover: #7a6a4a;
+      --theme-border: #544d3d;
+      --theme-highlight: #a8885a;
+      --theme-name-color: #d8c88a;
+    }
+
+    /* Theme: Rose */
+    body.theme-rose {
+      --theme-bg: #2e1a28;
+      --theme-card: #382532;
+      --theme-accent: #6a3a5a;
+      --theme-accent-hover: #7a4a6a;
+      --theme-border: #543d4d;
+      --theme-highlight: #a85a88;
+      --theme-name-color: #d88ac0;
+    }
+
+    /* Theme: Teal */
+    body.theme-teal {
+      --theme-bg: #1a2e2a;
+      --theme-card: #253834;
+      --theme-accent: #3a5a56;
+      --theme-accent-hover: #4a6a66;
+      --theme-border: #3d544f;
+      --theme-highlight: #5a8a84;
+      --theme-name-color: #8ad8cc;
+    }
+
+    /* Theme: Violet */
+    body.theme-violet {
+      --theme-bg: #281a2e;
+      --theme-card: #322538;
+      --theme-accent: #5a3a6a;
+      --theme-accent-hover: #6a4a7a;
+      --theme-border: #4d3d54;
+      --theme-highlight: #885aa8;
+      --theme-name-color: #c08ad8;
+    }
+
     body {
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
-      background: #1a1a2e;
+      background: var(--theme-bg);
       color: #eee;
       min-height: 100vh;
       padding: 20px;
+      transition: background 0.3s ease;
     }
 
     .container {
@@ -54,21 +154,24 @@
     }
 
     .btn-primary {
-      background: #4a4a6a;
+      background: var(--theme-accent);
       color: #fff;
+      transition: background 0.2s;
     }
 
     .btn-primary:hover {
-      background: #5a5a7a;
+      background: var(--theme-accent-hover);
     }
 
     .btn-secondary {
-      background: #2d2d44;
+      background: var(--theme-bg);
       color: #ccc;
+      border: 1px solid var(--theme-border);
+      transition: background 0.2s;
     }
 
     .btn-secondary:hover {
-      background: #3d3d54;
+      background: var(--theme-accent);
     }
 
     .btn-danger {
@@ -87,9 +190,10 @@
       gap: 8px;
       margin-bottom: 20px;
       padding: 12px;
-      background: #252538;
+      background: var(--theme-card);
       border-radius: 10px;
       overflow-x: auto;
+      transition: background 0.3s ease;
     }
 
     .round-nav-label {
@@ -107,8 +211,8 @@
 
     .round-tab {
       padding: 6px 14px;
-      background: #1a1a2e;
-      border: 1px solid #3d3d54;
+      background: var(--theme-bg);
+      border: 1px solid var(--theme-border);
       border-radius: 20px;
       color: #aaa;
       font-size: 0.85rem;
@@ -118,13 +222,13 @@
     }
 
     .round-tab:hover {
-      background: #2d2d44;
+      background: var(--theme-accent);
       color: #fff;
     }
 
     .round-tab.active {
-      background: #4a4a6a;
-      border-color: #6a6a8a;
+      background: var(--theme-accent);
+      border-color: var(--theme-highlight);
       color: #fff;
     }
 
@@ -161,10 +265,11 @@
 
     /* Round 0 - Initial Prompt Page */
     .round-zero-page {
-      background: #252538;
+      background: var(--theme-card);
       border-radius: 10px;
       padding: 20px;
       margin-bottom: 20px;
+      transition: background 0.3s ease;
     }
 
     .round-zero-page h2 {
@@ -236,11 +341,12 @@
     }
 
     .llm-card {
-      background: #252538;
+      background: var(--theme-card);
       border-radius: 10px;
       padding: 16px;
       display: flex;
       flex-direction: column;
+      transition: background 0.3s ease;
     }
 
     .llm-header {
@@ -294,20 +400,20 @@
     textarea {
       width: 100%;
       height: 180px;
-      background: #1a1a2e;
-      border: 1px solid #3d3d54;
+      background: var(--theme-bg);
+      border: 1px solid var(--theme-border);
       border-radius: 6px;
       padding: 12px;
       color: #ddd;
       font-family: inherit;
       font-size: 0.9rem;
       resize: vertical;
-      transition: border-color 0.2s;
+      transition: border-color 0.2s, background 0.3s ease;
     }
 
     textarea:focus {
       outline: none;
-      border-color: #5d5d74;
+      border-color: var(--theme-highlight);
     }
 
     textarea::placeholder {
@@ -315,10 +421,11 @@
     }
 
     .comment-section {
-      background: #252538;
+      background: var(--theme-card);
       border-radius: 10px;
       padding: 16px;
       margin-bottom: 20px;
+      transition: background 0.3s ease;
     }
 
     .comment-section .llm-name {
@@ -330,9 +437,10 @@
     }
 
     .generate-section {
-      background: #252538;
+      background: var(--theme-card);
       border-radius: 10px;
       padding: 20px;
+      transition: background 0.3s ease;
     }
 
     .generate-section h2 {
@@ -700,17 +808,194 @@
 
     .session-name {
       font-size: 0.85rem;
-      color: #888;
+      color: var(--theme-name-color);
       cursor: pointer;
       padding: 4px 8px;
       border-radius: 4px;
       transition: all 0.2s;
+      font-weight: 500;
     }
 
     .session-name:hover {
-      background: #2d2d44;
-      color: #aaa;
+      background: var(--theme-accent);
+      color: #fff;
     }
+
+    /* Conversation Switcher */
+    .conversation-switcher {
+      position: relative;
+    }
+
+    .conversation-btn {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 12px;
+      background: var(--theme-accent);
+      border: 1px solid var(--theme-border);
+      border-radius: 6px;
+      color: #fff;
+      font-size: 0.85rem;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .conversation-btn:hover {
+      background: var(--theme-accent-hover);
+    }
+
+    .conversation-btn .theme-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: var(--theme-highlight);
+    }
+
+    .conversation-dropdown {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      margin-top: 4px;
+      background: var(--theme-card);
+      border: 1px solid var(--theme-border);
+      border-radius: 8px;
+      min-width: 280px;
+      max-height: 400px;
+      overflow-y: auto;
+      z-index: 200;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+    }
+
+    .conversation-dropdown-header {
+      padding: 12px;
+      border-bottom: 1px solid var(--theme-border);
+      font-size: 0.8rem;
+      color: #888;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .conversation-item {
+      padding: 10px 12px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      cursor: pointer;
+      transition: all 0.2s;
+      border-left: 3px solid transparent;
+    }
+
+    .conversation-item:hover {
+      background: var(--theme-accent);
+    }
+
+    .conversation-item.active {
+      background: var(--theme-accent);
+      border-left-color: var(--theme-highlight);
+    }
+
+    .conversation-item .conv-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    .conversation-item .conv-name {
+      flex: 1;
+      font-size: 0.9rem;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .conversation-item .conv-rounds {
+      font-size: 0.75rem;
+      color: #888;
+    }
+
+    .conversation-item .conv-delete {
+      opacity: 0;
+      background: none;
+      border: none;
+      color: #f88;
+      cursor: pointer;
+      padding: 2px 6px;
+      font-size: 1rem;
+      transition: opacity 0.2s;
+    }
+
+    .conversation-item:hover .conv-delete {
+      opacity: 1;
+    }
+
+    .new-conversation-btn {
+      padding: 10px 12px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      cursor: pointer;
+      transition: all 0.2s;
+      border-top: 1px solid var(--theme-border);
+      color: #8f8;
+    }
+
+    .new-conversation-btn:hover {
+      background: var(--theme-accent);
+    }
+
+    /* Theme colors for conversation dots */
+    .conv-dot.theme-indigo { background: #6a6a8a; }
+    .conv-dot.theme-ocean { background: #4a8aba; }
+    .conv-dot.theme-forest { background: #5a8a5a; }
+    .conv-dot.theme-ember { background: #a85a5a; }
+    .conv-dot.theme-gold { background: #a8885a; }
+    .conv-dot.theme-rose { background: #a85a88; }
+    .conv-dot.theme-teal { background: #5a8a84; }
+    .conv-dot.theme-violet { background: #885aa8; }
+
+    /* Theme picker in new conversation */
+    .theme-picker {
+      display: flex;
+      gap: 8px;
+      padding: 12px;
+      border-top: 1px solid var(--theme-border);
+      flex-wrap: wrap;
+    }
+
+    .theme-picker-label {
+      width: 100%;
+      font-size: 0.8rem;
+      color: #888;
+      margin-bottom: 4px;
+    }
+
+    .theme-option {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      cursor: pointer;
+      border: 2px solid transparent;
+      transition: all 0.2s;
+    }
+
+    .theme-option:hover {
+      transform: scale(1.15);
+    }
+
+    .theme-option.selected {
+      border-color: #fff;
+    }
+
+    .theme-option.theme-indigo { background: #6a6a8a; }
+    .theme-option.theme-ocean { background: #4a8aba; }
+    .theme-option.theme-forest { background: #5a8a5a; }
+    .theme-option.theme-ember { background: #a85a5a; }
+    .theme-option.theme-gold { background: #a8885a; }
+    .theme-option.theme-rose { background: #a85a88; }
+    .theme-option.theme-teal { background: #5a8a84; }
+    .theme-option.theme-violet { background: #885aa8; }
 
     /* Mode Toggle */
     .mode-toggle {
@@ -843,7 +1128,25 @@
     <header>
       <div class="session-info">
         <h1>Prompt Stitch</h1>
-        <span class="session-name" onclick="renameSession()" title="Click to rename session" id="sessionName">Untitled Session</span>
+        <div class="conversation-switcher">
+          <button class="conversation-btn" onclick="toggleConversationDropdown(event)">
+            <span class="theme-dot"></span>
+            <span id="currentConvName">Untitled</span>
+            <span>▼</span>
+          </button>
+          <div class="conversation-dropdown" id="conversationDropdown" style="display: none;">
+            <div class="conversation-dropdown-header">
+              <span>Conversations</span>
+            </div>
+            <div id="conversationList">
+              <!-- Populated by JS -->
+            </div>
+            <div class="new-conversation-btn" onclick="showNewConversationDialog()">
+              <span>+</span> New Conversation
+            </div>
+          </div>
+        </div>
+        <span class="session-name" onclick="renameSession()" title="Click to rename" id="sessionName">Untitled Session</span>
       </div>
       <div class="header-actions">
         <div class="mode-toggle">
@@ -1050,6 +1353,19 @@
       deepseek: 'DeepSeek'
     };
 
+    // Available themes
+    const themes = ['indigo', 'ocean', 'forest', 'ember', 'gold', 'rose', 'teal', 'violet'];
+    const themeDisplayNames = {
+      indigo: 'Indigo',
+      ocean: 'Ocean',
+      forest: 'Forest',
+      ember: 'Ember',
+      gold: 'Gold',
+      rose: 'Rose',
+      teal: 'Teal',
+      violet: 'Violet'
+    };
+
     // Default identities
     const defaultIdentities = {
       chatgpt: 'You are ChatGPT, known for broad knowledge, clear explanations, and balanced reasoning.',
@@ -1059,7 +1375,11 @@
       deepseek: 'You are DeepSeek, known for strong reasoning, coding expertise, and efficient problem-solving.'
     };
 
-    // Session state
+    // Conversation management
+    let conversations = {}; // { id: { name, theme, session } }
+    let currentConversationId = null;
+
+    // Session state (for current conversation)
     let session = {
       name: 'Untitled Session',
       mode: 'standard', // 'standard' or 'tandem'
@@ -1078,48 +1398,92 @@
 
     // Load from localStorage on page load
     document.addEventListener('DOMContentLoaded', () => {
-      loadSession();
+      loadConversations();
       applyMode(session.mode || 'standard');
       renderRoundTabs();
       loadRound(session.currentRound);
+      renderConversationList();
     });
 
-    function loadSession() {
-      const saved = localStorage.getItem('promptStitchSession');
-      if (saved) {
-        session = JSON.parse(saved);
-        // Ensure rounds object exists
-        if (!session.rounds) session.rounds = {};
-        // Ensure identities exist
-        if (!session.identities) {
-          session.identities = { ...defaultIdentities };
+    function generateId() {
+      return Date.now().toString(36) + Math.random().toString(36).substr(2, 5);
+    }
+
+    function loadConversations() {
+      // Load conversations index
+      const savedIndex = localStorage.getItem('promptStitch_conversations');
+      const savedCurrentId = localStorage.getItem('promptStitch_currentId');
+
+      if (savedIndex) {
+        const index = JSON.parse(savedIndex);
+        // Load each conversation
+        index.forEach(id => {
+          const convData = localStorage.getItem(`promptStitch_conv_${id}`);
+          if (convData) {
+            conversations[id] = JSON.parse(convData);
+          }
+        });
+
+        // Set current conversation
+        if (savedCurrentId && conversations[savedCurrentId]) {
+          currentConversationId = savedCurrentId;
+        } else if (index.length > 0) {
+          currentConversationId = index[0];
         }
-        // Ensure enabledLlms exists (migration for old sessions)
-        if (!session.enabledLlms) {
-          session.enabledLlms = [...llms];
-        }
-        // Ensure roundZero exists (migration for old sessions)
-        if (!session.roundZero) {
-          session.roundZero = {
-            prompt: '',
-            timestamp: null,
-            sent: { chatgpt: false, gemini: false, claude: false, grok: false, deepseek: false }
+      }
+
+      // If no conversations exist, check for legacy single session
+      if (Object.keys(conversations).length === 0) {
+        const legacySession = localStorage.getItem('promptStitchSession');
+        if (legacySession) {
+          // Migrate legacy session to new format
+          const legacy = JSON.parse(legacySession);
+          const id = generateId();
+          conversations[id] = {
+            name: legacy.name || 'Migrated Session',
+            theme: 'indigo',
+            session: legacy
           };
-          // For old sessions without roundZero, keep them on their current round
-          // but roundZero is now available in the tabs
+          currentConversationId = id;
+          saveConversationsIndex();
+          saveConversation(id);
+          // Remove legacy key
+          localStorage.removeItem('promptStitchSession');
+        } else {
+          // Create first conversation
+          createNewConversation('Untitled Session', 'indigo', true);
         }
-      } else {
-        // Initialize fresh - start at round 0
-        session.currentRound = 0;
-        session.enabledLlms = [...llms];
+      }
+
+      // Load current conversation into session
+      loadCurrentConversation();
+    }
+
+    function loadCurrentConversation() {
+      if (!currentConversationId || !conversations[currentConversationId]) return;
+
+      const conv = conversations[currentConversationId];
+      session = conv.session;
+
+      // Ensure required fields exist
+      if (!session.rounds) session.rounds = {};
+      if (!session.identities) session.identities = { ...defaultIdentities };
+      if (!session.enabledLlms) session.enabledLlms = [...llms];
+      if (!session.roundZero) {
         session.roundZero = {
           prompt: '',
           timestamp: null,
           sent: { chatgpt: false, gemini: false, claude: false, grok: false, deepseek: false }
         };
       }
+
+      // Update UI
       document.getElementById('sessionName').textContent = session.name;
+      document.getElementById('currentConvName').textContent = truncateName(session.name, 20);
       document.getElementById('preamble').value = session.preamble;
+
+      // Apply theme
+      applyTheme(conv.theme || 'indigo');
 
       // Load identities into textareas
       llms.forEach(llm => {
@@ -1133,8 +1497,205 @@
       renderLlmGrid();
     }
 
+    function truncateName(name, maxLen) {
+      return name.length > maxLen ? name.substring(0, maxLen - 2) + '...' : name;
+    }
+
+    function applyTheme(theme) {
+      // Remove all theme classes
+      themes.forEach(t => document.body.classList.remove(`theme-${t}`));
+      // Apply new theme
+      document.body.classList.add(`theme-${theme}`);
+    }
+
+    function saveConversationsIndex() {
+      const index = Object.keys(conversations);
+      localStorage.setItem('promptStitch_conversations', JSON.stringify(index));
+      localStorage.setItem('promptStitch_currentId', currentConversationId);
+    }
+
+    function saveConversation(id) {
+      if (conversations[id]) {
+        localStorage.setItem(`promptStitch_conv_${id}`, JSON.stringify(conversations[id]));
+      }
+    }
+
     function saveSession() {
-      localStorage.setItem('promptStitchSession', JSON.stringify(session));
+      if (!currentConversationId) return;
+      conversations[currentConversationId].session = session;
+      conversations[currentConversationId].name = session.name;
+      saveConversation(currentConversationId);
+      saveConversationsIndex();
+    }
+
+    function createNewConversation(name, theme, skipSwitch = false) {
+      const id = generateId();
+      conversations[id] = {
+        name: name,
+        theme: theme,
+        session: {
+          name: name,
+          mode: 'standard',
+          preamble: 'Other LLMs have responded to the same context/question I\'ve given you. Here are their responses:',
+          identities: { ...defaultIdentities },
+          enabledLlms: [...llms],
+          currentRound: 0,
+          rounds: {},
+          roundZero: {
+            prompt: '',
+            timestamp: null,
+            sent: { chatgpt: false, gemini: false, claude: false, grok: false, deepseek: false }
+          }
+        }
+      };
+
+      saveConversation(id);
+      saveConversationsIndex();
+
+      if (!skipSwitch) {
+        switchConversation(id);
+        showToast(`Created "${name}"`);
+      } else {
+        currentConversationId = id;
+      }
+
+      renderConversationList();
+      return id;
+    }
+
+    function switchConversation(id) {
+      if (!conversations[id]) return;
+
+      // Save current conversation first
+      if (currentConversationId) {
+        saveSession();
+      }
+
+      currentConversationId = id;
+      loadCurrentConversation();
+      applyMode(session.mode || 'standard');
+      renderRoundTabs();
+      loadRound(session.currentRound);
+      renderConversationList();
+      saveConversationsIndex();
+      hideConversationDropdown();
+    }
+
+    function deleteConversation(id, event) {
+      event.stopPropagation();
+
+      const conv = conversations[id];
+      if (!conv) return;
+
+      if (!confirm(`Delete "${conv.name}"?`)) return;
+
+      // Remove from storage
+      localStorage.removeItem(`promptStitch_conv_${id}`);
+      delete conversations[id];
+
+      // If deleting current conversation, switch to another
+      if (id === currentConversationId) {
+        const remaining = Object.keys(conversations);
+        if (remaining.length > 0) {
+          switchConversation(remaining[0]);
+        } else {
+          // Create a new default conversation
+          createNewConversation('Untitled Session', 'indigo');
+        }
+      }
+
+      saveConversationsIndex();
+      renderConversationList();
+      showToast('Conversation deleted');
+    }
+
+    function toggleConversationDropdown(event) {
+      event.stopPropagation();
+      const dropdown = document.getElementById('conversationDropdown');
+      if (dropdown.style.display === 'none') {
+        dropdown.style.display = 'block';
+        renderConversationList();
+        // Close when clicking outside
+        setTimeout(() => {
+          document.addEventListener('click', hideConversationDropdown, { once: true });
+        }, 0);
+      } else {
+        dropdown.style.display = 'none';
+      }
+    }
+
+    function hideConversationDropdown() {
+      document.getElementById('conversationDropdown').style.display = 'none';
+    }
+
+    function renderConversationList() {
+      const container = document.getElementById('conversationList');
+      const ids = Object.keys(conversations);
+
+      // Sort by most recently created (newest first)
+      ids.sort((a, b) => {
+        const aTime = parseInt(a.split('').slice(0, 8).join(''), 36);
+        const bTime = parseInt(b.split('').slice(0, 8).join(''), 36);
+        return bTime - aTime;
+      });
+
+      let html = ids.map(id => {
+        const conv = conversations[id];
+        const isActive = id === currentConversationId;
+        const roundCount = Object.keys(conv.session.rounds || {}).length;
+
+        return `
+          <div class="conversation-item ${isActive ? 'active' : ''}" onclick="switchConversation('${id}')">
+            <span class="conv-dot theme-${conv.theme}"></span>
+            <span class="conv-name">${escapeHtml(conv.name)}</span>
+            <span class="conv-rounds">${roundCount}r</span>
+            ${ids.length > 1 ? `<button class="conv-delete" onclick="deleteConversation('${id}', event)" title="Delete">×</button>` : ''}
+          </div>
+        `;
+      }).join('');
+
+      // Add theme picker for current conversation
+      const currentTheme = conversations[currentConversationId]?.theme || 'indigo';
+      html += `
+        <div class="theme-picker" onclick="event.stopPropagation()">
+          <div class="theme-picker-label">Theme for current conversation:</div>
+          ${themes.map(t => `
+            <div class="theme-option theme-${t} ${t === currentTheme ? 'selected' : ''}"
+                 onclick="changeConversationTheme('${t}')"
+                 title="${themeDisplayNames[t]}"></div>
+          `).join('')}
+        </div>
+      `;
+
+      container.innerHTML = html;
+    }
+
+    function escapeHtml(text) {
+      const div = document.createElement('div');
+      div.textContent = text;
+      return div.innerHTML;
+    }
+
+    function showNewConversationDialog() {
+      hideConversationDropdown();
+
+      // Simple prompt for now - could make a modal later
+      const name = prompt('Conversation name:', 'New Conversation');
+      if (!name || !name.trim()) return;
+
+      // Pick next theme that's not recently used
+      const usedThemes = Object.values(conversations).map(c => c.theme);
+      let theme = themes.find(t => !usedThemes.includes(t)) || themes[Math.floor(Math.random() * themes.length)];
+
+      createNewConversation(name.trim(), theme);
+    }
+
+    function changeConversationTheme(theme) {
+      if (!currentConversationId) return;
+      conversations[currentConversationId].theme = theme;
+      applyTheme(theme);
+      saveConversation(currentConversationId);
+      renderConversationList();
     }
 
     // LLM colors for dot styling
@@ -1894,7 +2455,9 @@
       if (newName && newName.trim()) {
         session.name = newName.trim();
         document.getElementById('sessionName').textContent = session.name;
+        document.getElementById('currentConvName').textContent = truncateName(session.name, 20);
         saveSession();
+        renderConversationList();
       }
     }
 
