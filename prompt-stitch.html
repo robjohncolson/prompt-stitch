@@ -145,6 +145,83 @@
       background: #555;
     }
 
+    .round-tab.round-zero {
+      background: #2a3a4a;
+      border-color: #4a6a8a;
+    }
+
+    .round-tab.round-zero.active {
+      background: #3a5a7a;
+      border-color: #5a8aba;
+    }
+
+    .round-tab.round-zero .dot {
+      background: #6af;
+    }
+
+    /* Round 0 - Initial Prompt Page */
+    .round-zero-page {
+      background: #252538;
+      border-radius: 10px;
+      padding: 20px;
+      margin-bottom: 20px;
+    }
+
+    .round-zero-page h2 {
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: #6af;
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .round-zero-page .subtitle {
+      font-size: 0.85rem;
+      color: #888;
+      margin-bottom: 16px;
+    }
+
+    .round-zero-page textarea {
+      height: 250px;
+    }
+
+    .round-zero-timestamp {
+      font-size: 0.8rem;
+      color: #6af;
+      margin-top: 12px;
+      padding: 10px;
+      background: #1a1a2e;
+      border-radius: 6px;
+      border-left: 3px solid #6af;
+    }
+
+    .round-zero-actions {
+      display: flex;
+      gap: 12px;
+      margin-top: 16px;
+      flex-wrap: wrap;
+    }
+
+    .round-zero-actions .generate-btn {
+      flex: 1;
+      min-width: 150px;
+    }
+
+    .initial-prompt-preview {
+      background: #1a1a2e;
+      border: 1px solid #3d3d54;
+      border-radius: 6px;
+      padding: 12px;
+      margin-top: 12px;
+      font-size: 0.85rem;
+      color: #aaa;
+      white-space: pre-wrap;
+      max-height: 200px;
+      overflow-y: auto;
+    }
+
     .grid {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
@@ -191,6 +268,7 @@
     .gemini .llm-dot { background: #4285f4; }
     .claude .llm-dot { background: #d4a574; }
     .grok .llm-dot { background: #1da1f2; }
+    .deepseek .llm-dot { background: #8b5cf6; }
 
     .copy-btn {
       background: #3d3d54;
@@ -314,6 +392,23 @@
     .generate-btn.grok {
       background: linear-gradient(135deg, #1da1f2 0%, #0d8bd9 100%);
       color: #fff;
+    }
+
+    .generate-btn.deepseek {
+      background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
+      color: #fff;
+    }
+
+    .generate-btn.claude-code {
+      background: linear-gradient(135deg, #f97316 0%, #ea580c 100%);
+      color: #fff;
+      grid-column: span 2;
+    }
+
+    @media (max-width: 700px) {
+      .generate-btn.claude-code {
+        grid-column: span 1;
+      }
     }
 
     .generate-btn:hover {
@@ -464,11 +559,17 @@
       transition: all 0.3s;
       pointer-events: none;
       z-index: 1000;
+      max-width: 400px;
     }
 
     .toast.visible {
       opacity: 1;
       transform: translateY(0);
+    }
+
+    .toast.warning {
+      background: #5c4a2a;
+      color: #fc8;
     }
 
     .char-count {
@@ -498,6 +599,99 @@
       background: #5c2a2a;
     }
 
+    /* LLM card close button */
+    .llm-close-btn {
+      background: transparent;
+      border: none;
+      color: #666;
+      font-size: 1.2rem;
+      cursor: pointer;
+      padding: 4px 8px;
+      border-radius: 4px;
+      line-height: 1;
+      transition: all 0.2s;
+      margin-left: 8px;
+    }
+
+    .llm-close-btn:hover {
+      background: #5c2a2a;
+      color: #f88;
+    }
+
+    .llm-header-left {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .llm-header-right {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    /* Add LLM button */
+    .add-llm-card {
+      background: #1a1a2e;
+      border: 2px dashed #3d3d54;
+      border-radius: 10px;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 180px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .add-llm-card:hover {
+      border-color: #5d5d74;
+      background: #252538;
+    }
+
+    .add-llm-card .add-icon {
+      font-size: 2rem;
+      color: #666;
+      margin-bottom: 8px;
+    }
+
+    .add-llm-card .add-text {
+      font-size: 0.9rem;
+      color: #888;
+    }
+
+    /* Add LLM dropdown */
+    .add-llm-dropdown {
+      position: absolute;
+      background: #252538;
+      border: 1px solid #3d3d54;
+      border-radius: 8px;
+      padding: 8px 0;
+      z-index: 100;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+      min-width: 160px;
+    }
+
+    .add-llm-dropdown-item {
+      padding: 10px 16px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .add-llm-dropdown-item:hover {
+      background: #3d3d54;
+    }
+
+    .add-llm-dropdown-item .llm-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+    }
+
     .session-info {
       display: flex;
       align-items: center;
@@ -517,6 +711,131 @@
       background: #2d2d44;
       color: #aaa;
     }
+
+    /* Mode Toggle */
+    .mode-toggle {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: #1a1a2e;
+      border-radius: 25px;
+      padding: 4px;
+      margin-right: 16px;
+    }
+
+    .mode-btn {
+      padding: 6px 14px;
+      border: none;
+      border-radius: 20px;
+      font-size: 0.85rem;
+      cursor: pointer;
+      transition: all 0.2s;
+      background: transparent;
+      color: #888;
+    }
+
+    .mode-btn:hover {
+      color: #aaa;
+    }
+
+    .mode-btn.active {
+      background: #4a4a6a;
+      color: #fff;
+    }
+
+    .mode-btn.tandem.active {
+      background: linear-gradient(135deg, #f97316 0%, #ea580c 100%);
+      color: #fff;
+    }
+
+    /* Tandem mode round indicator */
+    .round-indicator {
+      display: none;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 16px;
+      background: #252538;
+      border-radius: 10px;
+      margin-bottom: 20px;
+      border-left: 4px solid #888;
+    }
+
+    .round-indicator.visible {
+      display: flex;
+    }
+
+    .round-indicator.claude-code-turn {
+      border-left-color: #f97316;
+      background: linear-gradient(90deg, rgba(249, 115, 22, 0.1) 0%, #252538 100%);
+    }
+
+    .round-indicator.web-llms-turn {
+      border-left-color: #4a4a6a;
+    }
+
+    .round-indicator-icon {
+      font-size: 1.5rem;
+    }
+
+    .round-indicator-text {
+      flex: 1;
+    }
+
+    .round-indicator-title {
+      font-weight: 600;
+      font-size: 1rem;
+      margin-bottom: 2px;
+    }
+
+    .round-indicator-subtitle {
+      font-size: 0.85rem;
+      color: #888;
+    }
+
+    /* Claude Code card */
+    .llm-card.claude-code {
+      grid-column: span 2;
+    }
+
+    .llm-card.claude-code .llm-dot {
+      background: #f97316;
+    }
+
+    @media (max-width: 900px) {
+      .llm-card.claude-code {
+        grid-column: span 1;
+      }
+    }
+
+    /* Hide elements based on mode */
+    .standard-only {
+      display: block;
+    }
+
+    .tandem-only {
+      display: none;
+    }
+
+    body.tandem-mode .standard-only {
+      display: none;
+    }
+
+    body.tandem-mode .tandem-only {
+      display: block;
+    }
+
+    /* Grid adjustments for tandem mode */
+    .grid.tandem-only {
+      display: none;
+    }
+
+    body.tandem-mode .grid.tandem-only {
+      display: grid;
+    }
+
+    body.tandem-mode .grid.standard-only {
+      display: none;
+    }
   </style>
 </head>
 <body>
@@ -527,6 +846,10 @@
         <span class="session-name" onclick="renameSession()" title="Click to rename session" id="sessionName">Untitled Session</span>
       </div>
       <div class="header-actions">
+        <div class="mode-toggle">
+          <button class="mode-btn standard active" onclick="setMode('standard')">Standard</button>
+          <button class="mode-btn tandem" onclick="setMode('tandem')">Tandem</button>
+        </div>
         <button class="btn btn-primary" onclick="newRound()">+ New Round</button>
         <button class="btn btn-secondary" onclick="document.getElementById('importInput').click()">Import</button>
         <button class="btn btn-secondary" onclick="exportSession()">Export</button>
@@ -545,6 +868,31 @@
       </div>
     </div>
 
+    <!-- Tandem mode round indicator -->
+    <div class="round-indicator" id="roundIndicator">
+      <div class="round-indicator-icon" id="roundIndicatorIcon">🤖</div>
+      <div class="round-indicator-text">
+        <div class="round-indicator-title" id="roundIndicatorTitle">Claude Code's Turn</div>
+        <div class="round-indicator-subtitle" id="roundIndicatorSubtitle">Paste Claude Code's response below</div>
+      </div>
+    </div>
+
+    <!-- Round 0: Initial Prompt (hidden when not on round 0) -->
+    <div class="round-zero-page" id="roundZeroPage" style="display: none;">
+      <h2>📝 Initial Prompt</h2>
+      <p class="subtitle">Enter your starting prompt here. This will be sent to all LLMs with their identity preambles and timestamp.</p>
+      <textarea id="initialPrompt" placeholder="Type your initial question or prompt that you'll send to all LLMs..." oninput="saveRoundZero(); updateCharCount('initialPrompt')"></textarea>
+      <div class="char-count" id="initialPrompt-count">0 chars</div>
+      <div class="round-zero-timestamp" id="roundZeroTimestamp">
+        Timestamp will be generated when you copy
+      </div>
+      <div class="round-zero-actions" id="roundZeroActions">
+        <!-- Dynamically rendered by renderRoundZeroButtons() -->
+      </div>
+    </div>
+
+    <!-- Standard round content (hidden when on round 0) -->
+    <div id="standardRoundContent">
     <div class="preamble-section">
       <div class="preamble-toggle" onclick="togglePreamble()">
         <span id="preambleArrow">▶</span> Customize Preamble
@@ -576,45 +924,76 @@
             <div class="identity-label"><span class="llm-dot" style="background:#1da1f2"></span> Grok</div>
             <textarea id="identity-grok" oninput="saveIdentities()" placeholder="Grok's role...">You are Grok, known for creative thinking, wit, and real-time awareness via X/Twitter.</textarea>
           </div>
+          <div class="identity-item">
+            <div class="identity-label"><span class="llm-dot" style="background:#8b5cf6"></span> DeepSeek</div>
+            <textarea id="identity-deepseek" oninput="saveIdentities()" placeholder="DeepSeek's role...">You are DeepSeek, known for strong reasoning, coding expertise, and efficient problem-solving.</textarea>
+          </div>
         </div>
       </div>
     </div>
 
-    <div class="grid">
+    <!-- Standard mode: dynamically rendered LLM cards -->
+    <div class="grid standard-only" id="standardGrid">
+      <!-- LLM cards are rendered dynamically by renderLlmGrid() -->
+    </div>
+
+    <!-- Tandem mode: Claude Code turn (odd rounds) -->
+    <div class="grid tandem-only" id="tandemClaudeCodeGrid" style="display: none;">
+      <div class="llm-card claude-code">
+        <div class="llm-header">
+          <div class="llm-name"><span class="llm-dot"></span>Claude Code</div>
+          <button class="copy-btn" onclick="copyResponse('claudecode')">Copy</button>
+        </div>
+        <textarea id="claudecode" placeholder="Paste Claude Code's response here..." oninput="saveCurrentRound(); updateCharCount('claudecode')"></textarea>
+        <div class="char-count" id="claudecode-count">0 chars</div>
+      </div>
+    </div>
+
+    <!-- Tandem mode: Web LLMs turn (even rounds) -->
+    <div class="grid tandem-only" id="tandemWebLlmsGrid" style="display: none;">
       <div class="llm-card chatgpt">
         <div class="llm-header">
           <div class="llm-name"><span class="llm-dot"></span>ChatGPT</div>
-          <button class="copy-btn" onclick="copyResponse('chatgpt')">Copy</button>
+          <button class="copy-btn" onclick="copyResponse('chatgpt-tandem')">Copy</button>
         </div>
-        <textarea id="chatgpt" placeholder="Paste ChatGPT's response here..." oninput="saveCurrentRound(); updateCharCount('chatgpt'); updateReadinessIndicators()"></textarea>
-        <div class="char-count" id="chatgpt-count">0 chars</div>
+        <textarea id="chatgpt-tandem" placeholder="Paste ChatGPT's response here..." oninput="saveCurrentRound(); updateCharCount('chatgpt-tandem')"></textarea>
+        <div class="char-count" id="chatgpt-tandem-count">0 chars</div>
       </div>
 
       <div class="llm-card gemini">
         <div class="llm-header">
           <div class="llm-name"><span class="llm-dot"></span>Gemini</div>
-          <button class="copy-btn" onclick="copyResponse('gemini')">Copy</button>
+          <button class="copy-btn" onclick="copyResponse('gemini-tandem')">Copy</button>
         </div>
-        <textarea id="gemini" placeholder="Paste Gemini's response here..." oninput="saveCurrentRound(); updateCharCount('gemini'); updateReadinessIndicators()"></textarea>
-        <div class="char-count" id="gemini-count">0 chars</div>
+        <textarea id="gemini-tandem" placeholder="Paste Gemini's response here..." oninput="saveCurrentRound(); updateCharCount('gemini-tandem')"></textarea>
+        <div class="char-count" id="gemini-tandem-count">0 chars</div>
       </div>
 
       <div class="llm-card claude">
         <div class="llm-header">
           <div class="llm-name"><span class="llm-dot"></span>Claude</div>
-          <button class="copy-btn" onclick="copyResponse('claude')">Copy</button>
+          <button class="copy-btn" onclick="copyResponse('claude-tandem')">Copy</button>
         </div>
-        <textarea id="claude" placeholder="Paste Claude's response here..." oninput="saveCurrentRound(); updateCharCount('claude'); updateReadinessIndicators()"></textarea>
-        <div class="char-count" id="claude-count">0 chars</div>
+        <textarea id="claude-tandem" placeholder="Paste Claude's response here..." oninput="saveCurrentRound(); updateCharCount('claude-tandem')"></textarea>
+        <div class="char-count" id="claude-tandem-count">0 chars</div>
       </div>
 
       <div class="llm-card grok">
         <div class="llm-header">
           <div class="llm-name"><span class="llm-dot"></span>Grok</div>
-          <button class="copy-btn" onclick="copyResponse('grok')">Copy</button>
+          <button class="copy-btn" onclick="copyResponse('grok-tandem')">Copy</button>
         </div>
-        <textarea id="grok" placeholder="Paste Grok's response here..." oninput="saveCurrentRound(); updateCharCount('grok'); updateReadinessIndicators()"></textarea>
-        <div class="char-count" id="grok-count">0 chars</div>
+        <textarea id="grok-tandem" placeholder="Paste Grok's response here..." oninput="saveCurrentRound(); updateCharCount('grok-tandem')"></textarea>
+        <div class="char-count" id="grok-tandem-count">0 chars</div>
+      </div>
+
+      <div class="llm-card deepseek">
+        <div class="llm-header">
+          <div class="llm-name"><span class="llm-dot"></span>DeepSeek</div>
+          <button class="copy-btn" onclick="copyResponse('deepseek-tandem')">Copy</button>
+        </div>
+        <textarea id="deepseek-tandem" placeholder="Paste DeepSeek's response here..." oninput="saveCurrentRound(); updateCharCount('deepseek-tandem')"></textarea>
+        <div class="char-count" id="deepseek-tandem-count">0 chars</div>
       </div>
     </div>
 
@@ -624,7 +1003,8 @@
       <div class="char-count" id="commentary-count">0 chars</div>
     </div>
 
-    <div class="generate-section">
+    <!-- Standard mode generate section -->
+    <div class="generate-section standard-only" id="standardGenerateSection">
       <h2>Generate Composite Prompt For:</h2>
       <div class="generate-buttons">
         <button class="generate-btn chatgpt" onclick="generateFor('chatgpt')">
@@ -639,19 +1019,35 @@
         <button class="generate-btn grok" onclick="generateFor('grok')">
           <span class="dot" style="background:#fff"></span> Grok
         </button>
+        <button class="generate-btn deepseek" onclick="generateFor('deepseek')">
+          <span class="dot" style="background:#fff"></span> DeepSeek
+        </button>
+        <button class="generate-btn claude-code" onclick="generateForClaudeCode()">
+          <span class="dot" style="background:#fff"></span> Claude Code (Full Context)
+        </button>
       </div>
     </div>
+
+    <!-- Tandem mode generate section -->
+    <div class="generate-section tandem-only" id="tandemGenerateSection" style="display: none;">
+      <h2 id="tandemGenerateTitle">Generate Prompt For Next Round:</h2>
+      <div class="generate-buttons" id="tandemGenerateButtons">
+        <!-- Dynamically populated based on whose turn it is -->
+      </div>
+    </div>
+    </div><!-- end standardRoundContent -->
   </div>
 
   <div class="toast" id="toast">Copied to clipboard!</div>
 
   <script>
-    const llms = ['chatgpt', 'gemini', 'claude', 'grok'];
+    const llms = ['chatgpt', 'gemini', 'claude', 'grok', 'deepseek'];
     const displayNames = {
       chatgpt: 'ChatGPT',
       gemini: 'Gemini',
       claude: 'Claude',
-      grok: 'Grok'
+      grok: 'Grok',
+      deepseek: 'DeepSeek'
     };
 
     // Default identities
@@ -659,21 +1055,31 @@
       chatgpt: 'You are ChatGPT, known for broad knowledge, clear explanations, and balanced reasoning.',
       gemini: 'You are Gemini, known for multimodal understanding, research synthesis, and Google ecosystem integration.',
       claude: 'You are Claude, known for nuanced analysis, careful reasoning, and thoughtful long-form responses.',
-      grok: 'You are Grok, known for creative thinking, wit, and real-time awareness via X/Twitter.'
+      grok: 'You are Grok, known for creative thinking, wit, and real-time awareness via X/Twitter.',
+      deepseek: 'You are DeepSeek, known for strong reasoning, coding expertise, and efficient problem-solving.'
     };
 
     // Session state
     let session = {
       name: 'Untitled Session',
+      mode: 'standard', // 'standard' or 'tandem'
       preamble: 'Other LLMs have responded to the same context/question I\'ve given you. Here are their responses:',
       identities: { ...defaultIdentities },
-      currentRound: 1,
-      rounds: {}
+      enabledLlms: [...llms], // Which LLMs are currently active
+      currentRound: 0,
+      rounds: {},
+      // Round 0 data
+      roundZero: {
+        prompt: '',
+        timestamp: null,
+        sent: { chatgpt: false, gemini: false, claude: false, grok: false, deepseek: false }
+      }
     };
 
     // Load from localStorage on page load
     document.addEventListener('DOMContentLoaded', () => {
       loadSession();
+      applyMode(session.mode || 'standard');
       renderRoundTabs();
       loadRound(session.currentRound);
     });
@@ -684,17 +1090,33 @@
         session = JSON.parse(saved);
         // Ensure rounds object exists
         if (!session.rounds) session.rounds = {};
-        // Ensure at least round 1 exists
-        if (!session.rounds[1]) {
-          session.rounds[1] = createEmptyRound();
-        }
         // Ensure identities exist
         if (!session.identities) {
           session.identities = { ...defaultIdentities };
         }
+        // Ensure enabledLlms exists (migration for old sessions)
+        if (!session.enabledLlms) {
+          session.enabledLlms = [...llms];
+        }
+        // Ensure roundZero exists (migration for old sessions)
+        if (!session.roundZero) {
+          session.roundZero = {
+            prompt: '',
+            timestamp: null,
+            sent: { chatgpt: false, gemini: false, claude: false, grok: false, deepseek: false }
+          };
+          // For old sessions without roundZero, keep them on their current round
+          // but roundZero is now available in the tabs
+        }
       } else {
-        // Initialize with round 1
-        session.rounds[1] = createEmptyRound();
+        // Initialize fresh - start at round 0
+        session.currentRound = 0;
+        session.enabledLlms = [...llms];
+        session.roundZero = {
+          prompt: '',
+          timestamp: null,
+          sent: { chatgpt: false, gemini: false, claude: false, grok: false, deepseek: false }
+        };
       }
       document.getElementById('sessionName').textContent = session.name;
       document.getElementById('preamble').value = session.preamble;
@@ -706,10 +1128,195 @@
           textarea.value = session.identities[llm] || defaultIdentities[llm];
         }
       });
+
+      // Render dynamic LLM grid
+      renderLlmGrid();
     }
 
     function saveSession() {
       localStorage.setItem('promptStitchSession', JSON.stringify(session));
+    }
+
+    // LLM colors for dot styling
+    const llmColors = {
+      chatgpt: '#10a37f',
+      gemini: '#4285f4',
+      claude: '#d4a574',
+      grok: '#1da1f2',
+      deepseek: '#8b5cf6'
+    };
+
+    function renderLlmGrid() {
+      const grid = document.getElementById('standardGrid');
+      if (!grid) return;
+
+      // Build HTML for enabled LLMs
+      let html = session.enabledLlms.map(llm => `
+        <div class="llm-card ${llm}">
+          <div class="llm-header">
+            <div class="llm-header-left">
+              <div class="llm-name"><span class="llm-dot"></span>${displayNames[llm]}</div>
+            </div>
+            <div class="llm-header-right">
+              <button class="copy-btn" onclick="copyResponse('${llm}')">Copy</button>
+              <button class="llm-close-btn" onclick="disableLlm('${llm}')" title="Remove ${displayNames[llm]}">×</button>
+            </div>
+          </div>
+          <textarea id="${llm}" placeholder="Paste ${displayNames[llm]}'s response here..." oninput="saveCurrentRound(); updateCharCount('${llm}'); updateReadinessIndicators()"></textarea>
+          <div class="char-count" id="${llm}-count">0 chars</div>
+        </div>
+      `).join('');
+
+      // Add the "Add LLM" card if there are disabled LLMs
+      const disabledLlms = llms.filter(llm => !session.enabledLlms.includes(llm));
+      if (disabledLlms.length > 0) {
+        html += `
+          <div class="add-llm-card" onclick="showAddLlmDropdown(event)">
+            <div class="add-icon">+</div>
+            <div class="add-text">Add LLM</div>
+          </div>
+        `;
+      }
+
+      grid.innerHTML = html;
+
+      // Also update the generate buttons to match enabled LLMs
+      renderGenerateButtons();
+      renderRoundZeroButtons();
+    }
+
+    function renderGenerateButtons() {
+      const container = document.querySelector('#standardGenerateSection .generate-buttons');
+      if (!container) return;
+
+      let html = session.enabledLlms.map(llm => `
+        <button class="generate-btn ${llm}" onclick="generateFor('${llm}')">
+          <span class="dot" style="background:#fff"></span> ${displayNames[llm]}
+        </button>
+      `).join('');
+
+      // Always include Claude Code button
+      html += `
+        <button class="generate-btn claude-code" onclick="generateForClaudeCode()">
+          <span class="dot" style="background:#fff"></span> Claude Code (Full Context)
+        </button>
+      `;
+
+      container.innerHTML = html;
+    }
+
+    function renderRoundZeroButtons() {
+      const container = document.getElementById('roundZeroActions');
+      if (!container) return;
+
+      let html = session.enabledLlms.map(llm => `
+        <button class="generate-btn ${llm}" onclick="generateInitialFor('${llm}')">
+          <span class="dot" style="background:#fff"></span> Copy for ${displayNames[llm]}
+        </button>
+      `).join('');
+
+      // Always include Claude Code button
+      html += `
+        <button class="generate-btn claude-code" onclick="generateInitialForClaudeCode()">
+          <span class="dot" style="background:#fff"></span> Copy for Claude Code (Full Context)
+        </button>
+      `;
+
+      container.innerHTML = html;
+    }
+
+    function showAddLlmDropdown(event) {
+      event.stopPropagation();
+
+      // Remove any existing dropdown
+      const existing = document.querySelector('.add-llm-dropdown');
+      if (existing) existing.remove();
+
+      const disabledLlms = llms.filter(llm => !session.enabledLlms.includes(llm));
+      if (disabledLlms.length === 0) return;
+
+      const dropdown = document.createElement('div');
+      dropdown.className = 'add-llm-dropdown';
+      dropdown.innerHTML = disabledLlms.map(llm => `
+        <div class="add-llm-dropdown-item" onclick="enableLlm('${llm}')">
+          <span class="llm-dot" style="background:${llmColors[llm]}"></span>
+          ${displayNames[llm]}
+        </div>
+      `).join('');
+
+      // Position near the click
+      const rect = event.target.closest('.add-llm-card').getBoundingClientRect();
+      dropdown.style.position = 'fixed';
+      dropdown.style.top = (rect.top + 40) + 'px';
+      dropdown.style.left = rect.left + 'px';
+
+      document.body.appendChild(dropdown);
+
+      // Close dropdown when clicking elsewhere
+      setTimeout(() => {
+        document.addEventListener('click', function closeDropdown() {
+          dropdown.remove();
+          document.removeEventListener('click', closeDropdown);
+        }, { once: true });
+      }, 0);
+    }
+
+    function enableLlm(llm) {
+      if (!session.enabledLlms.includes(llm)) {
+        session.enabledLlms.push(llm);
+        // Keep original order
+        session.enabledLlms.sort((a, b) => llms.indexOf(a) - llms.indexOf(b));
+        saveSession();
+        renderLlmGrid();
+        // Reload round data into the new textarea
+        loadRound(session.currentRound);
+        showToast(`Added ${displayNames[llm]}`);
+      }
+      // Remove dropdown
+      const dropdown = document.querySelector('.add-llm-dropdown');
+      if (dropdown) dropdown.remove();
+    }
+
+    function disableLlm(llm) {
+      if (session.enabledLlms.length <= 1) {
+        showToast('Need at least one LLM');
+        return;
+      }
+      session.enabledLlms = session.enabledLlms.filter(l => l !== llm);
+      saveSession();
+      renderLlmGrid();
+      updateReadinessIndicators();
+      showToast(`Removed ${displayNames[llm]} - add back anytime`);
+    }
+
+    function setMode(mode) {
+      session.mode = mode;
+      saveSession();
+      applyMode(mode);
+      loadRound(session.currentRound);
+    }
+
+    function applyMode(mode) {
+      // Update toggle buttons
+      document.querySelectorAll('.mode-btn').forEach(btn => btn.classList.remove('active'));
+      document.querySelector(`.mode-btn.${mode}`).classList.add('active');
+
+      // Update body class
+      if (mode === 'tandem') {
+        document.body.classList.add('tandem-mode');
+      } else {
+        document.body.classList.remove('tandem-mode');
+      }
+    }
+
+    function isClaudeCodeTurn(roundNum) {
+      // In tandem mode: even rounds (2, 4, 6...) are Claude Code's turn
+      return roundNum > 0 && roundNum % 2 === 0;
+    }
+
+    function isWebLlmsTurn(roundNum) {
+      // In tandem mode: odd rounds (1, 3, 5...) are Web LLMs' turn
+      return roundNum > 0 && roundNum % 2 === 1;
     }
 
     function createEmptyRound() {
@@ -718,26 +1325,46 @@
         gemini: '',
         claude: '',
         grok: '',
+        deepseek: '',
+        claudecode: '', // For tandem mode
         commentary: '',
-        sent: { chatgpt: false, gemini: false, claude: false, grok: false }
+        sent: { chatgpt: false, gemini: false, claude: false, grok: false, deepseek: false }
       };
     }
 
     function isRoundEmpty(roundData) {
       if (!roundData) return true;
-      return !roundData.chatgpt && !roundData.gemini && !roundData.claude && !roundData.grok && !roundData.commentary;
+      return !roundData.chatgpt && !roundData.gemini && !roundData.claude && !roundData.grok && !roundData.deepseek && !roundData.claudecode && !roundData.commentary;
     }
 
     function saveCurrentRound() {
       const existingRound = session.rounds[session.currentRound] || createEmptyRound();
       const roundData = {
-        chatgpt: document.getElementById('chatgpt').value,
-        gemini: document.getElementById('gemini').value,
-        claude: document.getElementById('claude').value,
-        grok: document.getElementById('grok').value,
-        commentary: document.getElementById('commentary').value,
-        sent: existingRound.sent || { chatgpt: false, gemini: false, claude: false, grok: false }
+        chatgpt: document.getElementById('chatgpt')?.value || existingRound.chatgpt || '',
+        gemini: document.getElementById('gemini')?.value || existingRound.gemini || '',
+        claude: document.getElementById('claude')?.value || existingRound.claude || '',
+        grok: document.getElementById('grok')?.value || existingRound.grok || '',
+        deepseek: document.getElementById('deepseek')?.value || existingRound.deepseek || '',
+        claudecode: document.getElementById('claudecode')?.value || existingRound.claudecode || '',
+        commentary: document.getElementById('commentary')?.value || '',
+        sent: existingRound.sent || { chatgpt: false, gemini: false, claude: false, grok: false, deepseek: false }
       };
+
+      // In tandem mode, also save from tandem-specific fields
+      if (session.mode === 'tandem') {
+        const chatgptTandem = document.getElementById('chatgpt-tandem');
+        const geminiTandem = document.getElementById('gemini-tandem');
+        const claudeTandem = document.getElementById('claude-tandem');
+        const grokTandem = document.getElementById('grok-tandem');
+        const deepseekTandem = document.getElementById('deepseek-tandem');
+
+        if (chatgptTandem?.value) roundData.chatgpt = chatgptTandem.value;
+        if (geminiTandem?.value) roundData.gemini = geminiTandem.value;
+        if (claudeTandem?.value) roundData.claude = claudeTandem.value;
+        if (grokTandem?.value) roundData.grok = grokTandem.value;
+        if (deepseekTandem?.value) roundData.deepseek = deepseekTandem.value;
+      }
+
       session.rounds[session.currentRound] = roundData;
       session.preamble = document.getElementById('preamble').value;
       saveSession();
@@ -745,43 +1372,265 @@
     }
 
     function loadRound(roundNum) {
+      roundNum = parseInt(roundNum, 10); // Ensure it's a number
       session.currentRound = roundNum;
-      const roundData = session.rounds[roundNum] || createEmptyRound();
 
-      document.getElementById('chatgpt').value = roundData.chatgpt || '';
-      document.getElementById('gemini').value = roundData.gemini || '';
-      document.getElementById('claude').value = roundData.claude || '';
-      document.getElementById('grok').value = roundData.grok || '';
-      document.getElementById('commentary').value = roundData.commentary || '';
+      // Toggle visibility between Round 0 page and standard round content
+      const roundZeroPage = document.getElementById('roundZeroPage');
+      const standardContent = document.getElementById('standardRoundContent');
+      const roundIndicator = document.getElementById('roundIndicator');
 
-      // Update char counts
-      llms.forEach(updateCharCount);
-      updateCharCount('commentary');
+      // Hide tandem grids by default
+      document.getElementById('tandemClaudeCodeGrid').style.display = 'none';
+      document.getElementById('tandemWebLlmsGrid').style.display = 'none';
+      document.getElementById('tandemGenerateSection').style.display = 'none';
+      roundIndicator.classList.remove('visible', 'claude-code-turn', 'web-llms-turn');
 
-      // Update sent button states
-      updateSentButtons(roundData.sent || {});
+      if (roundNum === 0) {
+        // Show Round 0 page
+        roundZeroPage.style.display = 'block';
+        standardContent.style.display = 'none';
 
-      // Update readiness indicators
-      updateReadinessIndicators();
+        // Load Round 0 data
+        document.getElementById('initialPrompt').value = session.roundZero.prompt || '';
+        updateCharCount('initialPrompt');
+
+        // Update timestamp display
+        updateRoundZeroTimestamp();
+
+        // Update sent button states for round 0
+        updateRoundZeroSentButtons();
+      } else {
+        // Show standard round content
+        roundZeroPage.style.display = 'none';
+        standardContent.style.display = 'block';
+
+        const roundData = session.rounds[roundNum] || createEmptyRound();
+
+        if (session.mode === 'tandem') {
+          // Tandem mode: show appropriate grid based on round
+          document.getElementById('standardGrid').style.display = 'none';
+          document.getElementById('standardGenerateSection').style.display = 'none';
+          document.getElementById('tandemGenerateSection').style.display = 'block';
+          roundIndicator.classList.add('visible');
+
+          if (isWebLlmsTurn(roundNum)) {
+            // Web LLMs' turn (odd rounds: 1, 3, 5...)
+            document.getElementById('tandemWebLlmsGrid').style.display = 'grid';
+            document.getElementById('chatgpt-tandem').value = roundData.chatgpt || '';
+            document.getElementById('gemini-tandem').value = roundData.gemini || '';
+            document.getElementById('claude-tandem').value = roundData.claude || '';
+            document.getElementById('grok-tandem').value = roundData.grok || '';
+            document.getElementById('deepseek-tandem').value = roundData.deepseek || '';
+
+            ['chatgpt-tandem', 'gemini-tandem', 'claude-tandem', 'grok-tandem', 'deepseek-tandem'].forEach(updateCharCount);
+
+            roundIndicator.classList.add('web-llms-turn');
+            document.getElementById('roundIndicatorIcon').textContent = '🌐';
+            document.getElementById('roundIndicatorTitle').textContent = "Web LLMs' Turn";
+            document.getElementById('roundIndicatorSubtitle').textContent = 'Paste responses from ChatGPT, Gemini, Claude, Grok, and DeepSeek, then generate prompt for Claude Code';
+
+            updateTandemGenerateButtons('web-llms-turn');
+          } else {
+            // Claude Code's turn (even rounds: 2, 4, 6...)
+            document.getElementById('tandemClaudeCodeGrid').style.display = 'grid';
+            document.getElementById('claudecode').value = roundData.claudecode || '';
+            updateCharCount('claudecode');
+
+            roundIndicator.classList.add('claude-code-turn');
+            document.getElementById('roundIndicatorIcon').textContent = '🔥';
+            document.getElementById('roundIndicatorTitle').textContent = "Claude Code's Turn";
+            document.getElementById('roundIndicatorSubtitle').textContent = 'Paste Claude Code\'s response below, then generate prompts for the web LLMs';
+
+            updateTandemGenerateButtons('claude-code-turn');
+          }
+        } else {
+          // Standard mode
+          document.getElementById('standardGrid').style.display = 'grid';
+          document.getElementById('standardGenerateSection').style.display = 'block';
+
+          // Load values for enabled LLMs only
+          session.enabledLlms.forEach(llm => {
+            const el = document.getElementById(llm);
+            if (el) {
+              el.value = roundData[llm] || '';
+            }
+          });
+        }
+
+        document.getElementById('commentary').value = roundData.commentary || '';
+
+        // Update char counts
+        session.enabledLlms.forEach(updateCharCount);
+        updateCharCount('commentary');
+
+        // Update sent button states
+        updateSentButtons(roundData.sent || {});
+
+        // Update readiness indicators (standard mode only)
+        if (session.mode === 'standard') {
+          updateReadinessIndicators();
+        }
+      }
 
       saveSession();
       renderRoundTabs();
     }
 
+    function updateTandemGenerateButtons(turn) {
+      const container = document.getElementById('tandemGenerateButtons');
+      const title = document.getElementById('tandemGenerateTitle');
+
+      if (turn === 'web-llms-turn') {
+        // After web LLMs respond, generate for Claude Code
+        title.textContent = 'Generate Prompt for Claude Code:';
+        container.innerHTML = `
+          <button class="generate-btn claude-code" onclick="generateTandemForClaudeCode()">
+            <span class="dot" style="background:#fff"></span> Claude Code (Full Context)
+          </button>
+        `;
+      } else {
+        // After Claude Code responds, generate for web LLMs
+        title.textContent = 'Generate Prompts for Web LLMs:';
+        container.innerHTML = `
+          <button class="generate-btn chatgpt" onclick="generateTandemForWebLlm('chatgpt')">
+            <span class="dot" style="background:#fff"></span> ChatGPT
+          </button>
+          <button class="generate-btn gemini" onclick="generateTandemForWebLlm('gemini')">
+            <span class="dot" style="background:#fff"></span> Gemini
+          </button>
+          <button class="generate-btn claude" onclick="generateTandemForWebLlm('claude')">
+            <span class="dot" style="background:#fff"></span> Claude
+          </button>
+          <button class="generate-btn grok" onclick="generateTandemForWebLlm('grok')">
+            <span class="dot" style="background:#fff"></span> Grok
+          </button>
+          <button class="generate-btn deepseek" onclick="generateTandemForWebLlm('deepseek')">
+            <span class="dot" style="background:#fff"></span> DeepSeek
+          </button>
+        `;
+      }
+    }
+
+    function updateRoundZeroTimestamp() {
+      const timestampEl = document.getElementById('roundZeroTimestamp');
+      if (session.roundZero.timestamp) {
+        const ts = new Date(session.roundZero.timestamp);
+        timestampEl.innerHTML = `<strong>Session started:</strong> ${ts.toLocaleString(undefined, {
+          weekday: 'long',
+          year: 'numeric',
+          month: 'long',
+          day: 'numeric',
+          hour: '2-digit',
+          minute: '2-digit',
+          timeZoneName: 'short'
+        })}`;
+      } else {
+        timestampEl.textContent = 'Timestamp will be generated when you copy the prompt';
+      }
+    }
+
+    function updateRoundZeroSentButtons() {
+      const sent = session.roundZero.sent || {};
+      session.enabledLlms.forEach(llm => {
+        const btn = document.querySelector(`#roundZeroActions .generate-btn.${llm}`);
+        if (btn) {
+          if (sent[llm]) {
+            btn.classList.add('sent');
+          } else {
+            btn.classList.remove('sent');
+          }
+        }
+      });
+    }
+
+    function saveRoundZero() {
+      session.roundZero.prompt = document.getElementById('initialPrompt').value;
+      saveSession();
+      renderRoundTabs();
+    }
+
+    function generateInitialFor(targetLlm) {
+      const prompt = document.getElementById('initialPrompt').value.trim();
+
+      if (!prompt) {
+        showToast('Please enter an initial prompt first');
+        return;
+      }
+
+      // Set timestamp if not already set
+      if (!session.roundZero.timestamp) {
+        session.roundZero.timestamp = new Date().toISOString();
+        updateRoundZeroTimestamp();
+      }
+
+      const identity = session.identities[targetLlm] || defaultIdentities[targetLlm];
+
+      // Generate timestamp string
+      const ts = new Date(session.roundZero.timestamp);
+      const timestamp = ts.toLocaleString(undefined, {
+        weekday: 'long',
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit',
+        timeZoneName: 'short'
+      });
+
+      // Build the initial prompt with identity and timestamp
+      let composite = '';
+
+      if (identity.trim()) {
+        composite += identity.trim() + '\n\n';
+      }
+
+      composite += `**Timestamp:** ${timestamp}\n\n`;
+      composite += '---\n\n';
+      composite += prompt;
+
+      // Copy to clipboard
+      navigator.clipboard.writeText(composite).then(() => {
+        showToast(`Copied initial prompt for ${displayNames[targetLlm]}!`);
+
+        // Mark as sent
+        session.roundZero.sent[targetLlm] = true;
+        saveSession();
+
+        // Visual feedback
+        const btn = document.querySelector(`#roundZeroActions .generate-btn.${targetLlm}`);
+        if (btn) {
+          btn.classList.add('copied');
+          btn.textContent = '✓ Copied!';
+          setTimeout(() => {
+            btn.classList.remove('copied');
+            btn.classList.add('sent');
+            btn.innerHTML = `<span class="dot" style="background:#fff"></span> Copy for ${displayNames[targetLlm]}`;
+          }, 2000);
+        }
+      });
+    }
+
     function updateSentButtons(sentStatus) {
-      llms.forEach(llm => {
-        const btn = document.querySelector(`.generate-btn.${llm}`);
-        if (sentStatus[llm]) {
-          btn.classList.add('sent');
-        } else {
-          btn.classList.remove('sent');
+      session.enabledLlms.forEach(llm => {
+        const btn = document.querySelector(`#standardGenerateSection .generate-btn.${llm}`);
+        if (btn) {
+          if (sentStatus[llm]) {
+            btn.classList.add('sent');
+          } else {
+            btn.classList.remove('sent');
+          }
         }
       });
     }
 
     function getReadinessFor(targetLlm) {
-      const otherLlms = llms.filter(llm => llm !== targetLlm);
-      const filled = otherLlms.filter(llm => document.getElementById(llm).value.trim().length > 0);
+      // Only consider enabled LLMs
+      const otherLlms = session.enabledLlms.filter(llm => llm !== targetLlm);
+      const filled = otherLlms.filter(llm => {
+        const el = document.getElementById(llm);
+        return el && el.value.trim().length > 0;
+      });
       const hasCommentary = document.getElementById('commentary').value.trim().length > 0;
 
       return {
@@ -794,8 +1643,9 @@
     }
 
     function updateReadinessIndicators() {
-      llms.forEach(llm => {
+      session.enabledLlms.forEach(llm => {
         const btn = document.querySelector(`.generate-btn.${llm}`);
+        if (!btn) return;
         const readiness = getReadinessFor(llm);
 
         // Remove existing classes
@@ -820,7 +1670,19 @@
       const container = document.getElementById('roundTabs');
       const roundNumbers = Object.keys(session.rounds).map(Number).sort((a, b) => a - b);
 
-      container.innerHTML = roundNumbers.map(num => {
+      // Build Round 0 tab first
+      const isRoundZeroEmpty = !session.roundZero || !session.roundZero.prompt;
+      const isRoundZeroActive = session.currentRound === 0;
+      let html = `
+        <div class="round-tab round-zero ${isRoundZeroActive ? 'active' : ''} ${isRoundZeroEmpty ? 'empty' : ''}"
+             onclick="loadRound(0)">
+          Round 0 (Start)
+          <span class="dot"></span>
+        </div>
+      `;
+
+      // Then add regular rounds
+      html += roundNumbers.map(num => {
         const isEmpty = isRoundEmpty(session.rounds[num]);
         const isActive = num === session.currentRound;
         return `
@@ -831,12 +1693,14 @@
           </div>
         `;
       }).join('');
+
+      container.innerHTML = html;
     }
 
     function newRound() {
       // Find the highest round number and add 1
       const roundNumbers = Object.keys(session.rounds).map(Number);
-      const newRoundNum = Math.max(...roundNumbers) + 1;
+      const newRoundNum = roundNumbers.length > 0 ? Math.max(...roundNumbers) + 1 : 1;
 
       session.rounds[newRoundNum] = createEmptyRound();
       session.currentRound = newRoundNum;
@@ -847,26 +1711,30 @@
     }
 
     function deleteCurrentRound() {
-      const roundNumbers = Object.keys(session.rounds).map(Number).sort((a, b) => a - b);
-
-      if (roundNumbers.length <= 1) {
-        showToast('Cannot delete the only round');
+      // Cannot delete Round 0
+      if (session.currentRound === 0) {
+        showToast('Cannot delete the initial prompt round');
         return;
       }
+
+      const roundNumbers = Object.keys(session.rounds).map(Number).sort((a, b) => a - b);
 
       if (!confirm(`Delete Round ${session.currentRound}?`)) {
         return;
       }
 
+      const deletedRound = session.currentRound;
       const currentIdx = roundNumbers.indexOf(session.currentRound);
       delete session.rounds[session.currentRound];
 
-      // Navigate to adjacent round
+      // Navigate to adjacent round (or round 0 if no rounds left)
       const remainingRounds = Object.keys(session.rounds).map(Number).sort((a, b) => a - b);
-      const newCurrent = remainingRounds[Math.min(currentIdx, remainingRounds.length - 1)];
+      const newCurrent = remainingRounds.length > 0
+        ? remainingRounds[Math.min(currentIdx, remainingRounds.length - 1)]
+        : 0;
 
       loadRound(newCurrent);
-      showToast(`Deleted Round ${session.currentRound}`);
+      showToast(`Deleted Round ${deletedRound}`);
     }
 
     function updateCharCount(id) {
@@ -888,31 +1756,18 @@
         return;
       }
 
-      // Warn if missing some responses or commentary
-      if (readiness.filledCount < readiness.totalCount || !readiness.hasCommentary) {
-        const missingItems = [];
-
-        if (readiness.missingLlms.length > 0) {
-          const missingNames = readiness.missingLlms.map(llm => displayNames[llm]).join(', ');
-          missingItems.push(`LLM responses: ${missingNames}`);
-        }
-
-        if (!readiness.hasCommentary) {
-          missingItems.push('Your commentary');
-        }
-
-        const warningMsg = `The following fields are empty:\n\n• ${missingItems.join('\n• ')}\n\nContinue anyway?`;
-
-        if (!confirm(warningMsg)) {
-          return;
-        }
+      // If missing some responses, show non-blocking warning but proceed anyway
+      if (readiness.missingLlms.length > 0) {
+        const missingNames = readiness.missingLlms.map(llm => displayNames[llm]).join(', ');
+        showToast(`Empty: ${missingNames} (close if unavailable)`, 'warning', 3000);
       }
 
-      // Get responses from the OTHER LLMs
-      const otherResponses = llms
+      // Get responses from the OTHER enabled LLMs
+      const otherResponses = session.enabledLlms
         .filter(llm => llm !== targetLlm)
         .map(llm => {
-          const response = document.getElementById(llm).value.trim();
+          const el = document.getElementById(llm);
+          const response = el ? el.value.trim() : '';
           if (response) {
             return `**${displayNames[llm]}:**\n${response}`;
           }
@@ -928,6 +1783,19 @@
       if (identity.trim()) {
         composite += identity.trim() + '\n\n';
       }
+
+      // Add timestamp
+      const now = new Date();
+      const timestamp = now.toLocaleString(undefined, {
+        weekday: 'long',
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit',
+        timeZoneName: 'short'
+      });
+      composite += `**Timestamp:** ${timestamp}\n\n`;
 
       if (preamble.trim()) {
         composite += preamble.trim() + '\n\n';
@@ -954,40 +1822,55 @@
         saveSession();
 
         // Visual feedback on button
-        const btn = document.querySelector(`.generate-btn.${targetLlm}`);
-        btn.classList.add('copied');
-        btn.textContent = '✓ Copied!';
-        setTimeout(() => {
-          btn.classList.remove('copied');
-          btn.classList.add('sent');
-          // Restore with readiness indicator
-          const r = getReadinessFor(targetLlm);
-          btn.innerHTML = `<span class="dot" style="background:#fff"></span> ${displayNames[targetLlm]} <span class="readiness">(${r.filledCount}/${r.totalCount})</span>`;
-        }, 2000);
+        const btn = document.querySelector(`#standardGenerateSection .generate-btn.${targetLlm}`);
+        if (btn) {
+          btn.classList.add('copied');
+          btn.textContent = '✓ Copied!';
+          setTimeout(() => {
+            btn.classList.remove('copied');
+            btn.classList.add('sent');
+            // Restore with readiness indicator
+            const r = getReadinessFor(targetLlm);
+            btn.innerHTML = `<span class="dot" style="background:#fff"></span> ${displayNames[targetLlm]} <span class="readiness">(${r.filledCount}/${r.totalCount})</span>`;
+          }, 2000);
+        }
       });
     }
 
     function copyResponse(llm) {
-      const text = document.getElementById(llm).value;
+      const textarea = document.getElementById(llm);
+      if (!textarea) return;
+      const text = textarea.value;
       navigator.clipboard.writeText(text).then(() => {
         const btn = document.querySelector(`.llm-card.${llm} .copy-btn`);
-        btn.classList.add('copied');
-        btn.textContent = '✓ Copied';
-        setTimeout(() => {
-          btn.classList.remove('copied');
-          btn.textContent = 'Copy';
-        }, 2000);
+        if (btn) {
+          btn.classList.add('copied');
+          btn.textContent = '✓ Copied';
+          setTimeout(() => {
+            btn.classList.remove('copied');
+            btn.textContent = 'Copy';
+          }, 2000);
+        }
       });
     }
 
     function clearAll() {
       if (confirm('Clear entire session and start fresh?')) {
+        const currentMode = session.mode || 'standard';
+        const currentEnabledLlms = session.enabledLlms || [...llms];
         session = {
           name: 'Untitled Session',
+          mode: currentMode, // Preserve the current mode
           preamble: 'Other LLMs have responded to the same context/question I\'ve given you. Here are their responses:',
           identities: { ...defaultIdentities },
-          currentRound: 1,
-          rounds: { 1: createEmptyRound() }
+          enabledLlms: currentEnabledLlms, // Preserve enabled LLMs
+          currentRound: 0,
+          rounds: {},
+          roundZero: {
+            prompt: '',
+            timestamp: null,
+            sent: { chatgpt: false, gemini: false, claude: false, grok: false, deepseek: false }
+          }
         };
         saveSession();
         document.getElementById('sessionName').textContent = session.name;
@@ -999,7 +1882,8 @@
             textarea.value = defaultIdentities[llm];
           }
         });
-        loadRound(1);
+        renderLlmGrid();
+        loadRound(0);
         showToast('Session cleared');
       }
     }
@@ -1019,6 +1903,17 @@
       let markdown = `# ${session.name}\n\n`;
       markdown += `Exported: ${new Date().toLocaleString()}\n\n`;
       markdown += `---\n\n`;
+
+      // Export Round 0 if it has content
+      if (session.roundZero && session.roundZero.prompt) {
+        markdown += `## Round 0 (Initial Prompt)\n\n`;
+        if (session.roundZero.timestamp) {
+          const ts = new Date(session.roundZero.timestamp);
+          markdown += `**Session Started:** ${ts.toLocaleString()}\n\n`;
+        }
+        markdown += `### Initial Prompt\n\n${session.roundZero.prompt}\n\n`;
+        markdown += `---\n\n`;
+      }
 
       roundNumbers.forEach(num => {
         const round = session.rounds[num];
@@ -1078,6 +1973,14 @@
           if (!session.identities) {
             session.identities = { ...defaultIdentities };
           }
+          // Ensure roundZero exists
+          if (!session.roundZero) {
+            session.roundZero = {
+              prompt: '',
+              timestamp: null,
+              sent: { chatgpt: false, gemini: false, claude: false, grok: false, deepseek: false }
+            };
+          }
           saveSession();
           document.getElementById('sessionName').textContent = session.name;
           document.getElementById('preamble').value = session.preamble;
@@ -1089,7 +1992,9 @@
             }
           });
           loadRound(session.currentRound);
-          showToast(`Imported ${Object.keys(session.rounds).length} round(s)`);
+          const roundCount = Object.keys(session.rounds).length;
+          const hasInitialPrompt = session.roundZero && session.roundZero.prompt;
+          showToast(`Imported ${hasInitialPrompt ? 'initial prompt + ' : ''}${roundCount} round(s)`);
         } catch (err) {
           console.error('Import error:', err);
           showToast('Failed to parse file');
@@ -1114,22 +2019,45 @@
       const imported = {
         name: name,
         preamble: 'Other LLMs have responded to the same context/question I\'ve given you. Here are their responses:',
-        currentRound: 1,
-        rounds: {}
+        currentRound: 0,
+        rounds: {},
+        roundZero: {
+          prompt: '',
+          timestamp: null,
+          sent: { chatgpt: false, gemini: false, claude: false, grok: false, deepseek: false }
+        }
       };
 
-      // Parse rounds
-      const roundRegex = /## Round (\d+)/g;
-      const sectionRegex = /### (ChatGPT|Gemini|Claude|Grok|My Commentary)\n\n([\s\S]*?)(?=\n### |\n## |\n---|\n*$)/g;
+      // Check for Round 0 (Initial Prompt)
+      const round0Match = content.match(/## Round 0 \(Initial Prompt\)\n\n([\s\S]*?)(?=\n## Round \d|\n*$)/);
+      if (round0Match) {
+        const round0Content = round0Match[1];
+        // Extract timestamp if present
+        const timestampMatch = round0Content.match(/\*\*Session Started:\*\* (.+)\n/);
+        if (timestampMatch) {
+          imported.roundZero.timestamp = new Date(timestampMatch[1]).toISOString();
+        }
+        // Extract initial prompt
+        const promptMatch = round0Content.match(/### Initial Prompt\n\n([\s\S]*?)(?=\n---|\s*$)/);
+        if (promptMatch) {
+          imported.roundZero.prompt = promptMatch[1].trim();
+        }
+      }
+
+      // Parse regular rounds
+      const roundRegex = /## Round (\d+)\n/g;
 
       let roundMatch;
       const roundPositions = [];
 
       while ((roundMatch = roundRegex.exec(content)) !== null) {
-        roundPositions.push({
-          num: parseInt(roundMatch[1]),
-          start: roundMatch.index
-        });
+        const num = parseInt(roundMatch[1]);
+        if (num > 0) { // Skip Round 0 as we handled it separately
+          roundPositions.push({
+            num: num,
+            start: roundMatch.index
+          });
+        }
       }
 
       roundPositions.forEach((pos, idx) => {
@@ -1141,7 +2069,7 @@
         const round = createEmptyRound();
 
         let sectionMatch;
-        const sectionRegexLocal = /### (ChatGPT|Gemini|Claude|Grok|My Commentary)\n\n([\s\S]*?)(?=\n### |\n## |\n---|\s*$)/g;
+        const sectionRegexLocal = /### (ChatGPT|Gemini|Claude|Grok|DeepSeek|My Commentary)\n\n([\s\S]*?)(?=\n### |\n## |\n---|\s*$)/g;
 
         while ((sectionMatch = sectionRegexLocal.exec(roundContent)) !== null) {
           const sectionName = sectionMatch[1];
@@ -1151,19 +2079,19 @@
           else if (sectionName === 'Gemini') round.gemini = sectionContent;
           else if (sectionName === 'Claude') round.claude = sectionContent;
           else if (sectionName === 'Grok') round.grok = sectionContent;
+          else if (sectionName === 'DeepSeek') round.deepseek = sectionContent;
           else if (sectionName === 'My Commentary') round.commentary = sectionContent;
         }
 
         imported.rounds[roundNum] = round;
       });
 
-      // Set current round to highest
+      // Set current round to highest regular round, or 0 if none
       const roundNums = Object.keys(imported.rounds).map(Number);
       if (roundNums.length > 0) {
         imported.currentRound = Math.max(...roundNums);
       } else {
-        imported.rounds[1] = createEmptyRound();
-        imported.currentRound = 1;
+        imported.currentRound = 0;
       }
 
       return imported;
@@ -1194,13 +2122,295 @@
       saveSession();
     }
 
-    function showToast(message) {
+    // Tandem mode: Generate prompt for a web LLM after Claude Code's turn (even rounds)
+    // This includes: Claude Code's response + peer web LLM responses from previous odd round
+    function generateTandemForWebLlm(targetLlm) {
+      const claudeCodeResponse = document.getElementById('claudecode').value.trim();
+      const commentary = document.getElementById('commentary').value.trim();
+
+      if (!claudeCodeResponse) {
+        showToast('Please paste Claude Code\'s response first');
+        return;
+      }
+
+      const identity = session.identities[targetLlm] || defaultIdentities[targetLlm];
+
+      // Build timestamp
+      const ts = session.roundZero.timestamp ? new Date(session.roundZero.timestamp) : new Date();
+      const timestamp = ts.toLocaleString(undefined, {
+        weekday: 'long',
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit',
+        timeZoneName: 'short'
+      });
+
+      let composite = '';
+
+      // Add identity
+      if (identity.trim()) {
+        composite += identity.trim() + '\n\n';
+      }
+
+      composite += `**Timestamp:** ${timestamp}\n\n`;
+      composite += `---\n\n`;
+
+      // Include initial prompt
+      if (session.roundZero && session.roundZero.prompt) {
+        composite += `## Original Question\n\n${session.roundZero.prompt}\n\n---\n\n`;
+      }
+
+      // Find the most recent web LLMs round (previous odd round)
+      const previousWebLlmsRound = session.currentRound - 1;
+      const previousRoundData = session.rounds[previousWebLlmsRound];
+
+      // Include peer web LLM responses from previous round (exclude target LLM's own response)
+      if (previousRoundData) {
+        const peerResponses = ['chatgpt', 'gemini', 'claude', 'grok', 'deepseek']
+          .filter(llm => llm !== targetLlm && previousRoundData[llm])
+          .map(llm => `### ${displayNames[llm]}\n\n${previousRoundData[llm]}`)
+          .join('\n\n');
+
+        if (peerResponses) {
+          composite += `## Your Peer LLMs' Previous Responses\n\nHere's what the other web LLMs said in the previous round:\n\n${peerResponses}\n\n---\n\n`;
+        }
+      }
+
+      // Include Claude Code's latest response
+      composite += `## Claude Code's Response\n\nClaude Code (a file-system adjacent AI with full project context) has now responded:\n\n${claudeCodeResponse}\n\n`;
+
+      if (commentary.trim()) {
+        composite += `---\n\n**User Commentary:**\n${commentary}\n\n`;
+      }
+
+      composite += `---\n\nPlease provide your updated perspective. Consider both Claude Code's response and your peer LLMs' previous responses. Do you agree? Disagree? Have anything to add?`;
+
+      navigator.clipboard.writeText(composite).then(() => {
+        showToast(`Copied prompt for ${displayNames[targetLlm]}!`);
+      });
+    }
+
+    // Tandem mode: Generate prompt for Claude Code after web LLMs' turn (odd rounds)
+    function generateTandemForClaudeCode() {
+      const commentary = document.getElementById('commentary').value.trim();
+
+      // Gather web LLM responses from current round
+      const webResponses = ['chatgpt', 'gemini', 'claude', 'grok', 'deepseek']
+        .map(llm => {
+          const el = document.getElementById(`${llm}-tandem`);
+          const response = el ? el.value.trim() : '';
+          return response ? { llm, response } : null;
+        })
+        .filter(Boolean);
+
+      if (webResponses.length === 0) {
+        showToast('Please paste at least one web LLM response first');
+        return;
+      }
+
+      const ts = session.roundZero.timestamp ? new Date(session.roundZero.timestamp) : new Date();
+      const timestamp = ts.toLocaleString(undefined, {
+        weekday: 'long',
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit',
+        timeZoneName: 'short'
+      });
+
+      let composite = `# Multi-LLM Tandem Session - Web LLM Feedback\n\n`;
+      composite += `**Session:** ${session.name}\n`;
+      composite += `**Started:** ${timestamp}\n`;
+      composite += `**Current Round:** ${session.currentRound}\n\n`;
+
+      composite += `You are Claude Code, working in tandem with web-based LLMs. They have reviewed your work and provided feedback.\n\n`;
+
+      // Include initial prompt
+      if (session.roundZero && session.roundZero.prompt) {
+        composite += `---\n\n## Original Question\n\n${session.roundZero.prompt}\n\n`;
+      }
+
+      // Include previous rounds history
+      const roundNumbers = Object.keys(session.rounds).map(Number).sort((a, b) => a - b);
+      const previousRounds = roundNumbers.filter(n => n < session.currentRound);
+
+      if (previousRounds.length > 0) {
+        composite += `---\n\n## Previous Rounds\n\n`;
+        previousRounds.forEach(num => {
+          const round = session.rounds[num];
+          if (isRoundEmpty(round)) return;
+
+          composite += `### Round ${num}`;
+          if (isWebLlmsTurn(num)) {
+            composite += ` (Web LLMs)\n\n`;
+            ['chatgpt', 'gemini', 'claude', 'grok', 'deepseek'].forEach(llm => {
+              if (round[llm]) {
+                composite += `**${displayNames[llm]}:** ${round[llm].substring(0, 300)}${round[llm].length > 300 ? '...' : ''}\n\n`;
+              }
+            });
+          } else {
+            composite += ` (Claude Code)\n\n`;
+            if (round.claudecode) {
+              composite += `${round.claudecode.substring(0, 500)}${round.claudecode.length > 500 ? '...' : ''}\n\n`;
+            }
+          }
+        });
+      }
+
+      // Include current round's web LLM responses (full text)
+      composite += `---\n\n## Current Round ${session.currentRound} - Web LLM Responses\n\n`;
+      webResponses.forEach(({ llm, response }) => {
+        composite += `### ${displayNames[llm]}\n\n${response}\n\n`;
+      });
+
+      if (commentary.trim()) {
+        composite += `---\n\n### User Commentary\n\n${commentary}\n\n`;
+      }
+
+      composite += `---\n\nPlease analyze the web LLMs' feedback and continue the discussion. Address their points, incorporate valid suggestions, and leverage your file-system access to provide insights they cannot.`;
+
+      navigator.clipboard.writeText(composite).then(() => {
+        showToast('Copied full context for Claude Code!');
+      });
+    }
+
+    function generateInitialForClaudeCode() {
+      const prompt = document.getElementById('initialPrompt').value.trim();
+
+      if (!prompt) {
+        showToast('Please enter an initial prompt first');
+        return;
+      }
+
+      // Set timestamp if not already set
+      if (!session.roundZero.timestamp) {
+        session.roundZero.timestamp = new Date().toISOString();
+        updateRoundZeroTimestamp();
+      }
+
+      const ts = new Date(session.roundZero.timestamp);
+      const timestamp = ts.toLocaleString(undefined, {
+        weekday: 'long',
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit',
+        timeZoneName: 'short'
+      });
+
+      // Build rich context for Claude Code
+      let composite = `# Multi-LLM Consensus Session\n\n`;
+      composite += `**Session:** ${session.name}\n`;
+      composite += `**Started:** ${timestamp}\n\n`;
+      composite += `You are Claude Code, a file-system adjacent AI with access to the full project context. You are participating in a multi-LLM consensus discussion where multiple AI models collaborate to provide comprehensive answers.\n\n`;
+      composite += `---\n\n`;
+      composite += `## Initial Prompt\n\n${prompt}\n\n`;
+      composite += `---\n\n`;
+      composite += `Please provide your response to the above prompt. Your response will be shared with other LLMs (ChatGPT, Gemini, Grok, DeepSeek) for collaborative refinement.`;
+
+      navigator.clipboard.writeText(composite).then(() => {
+        showToast('Copied full context for Claude Code!');
+        const btn = document.querySelector('.round-zero-actions .generate-btn.claude-code');
+        btn.classList.add('copied');
+        btn.textContent = '✓ Copied!';
+        setTimeout(() => {
+          btn.classList.remove('copied');
+          btn.innerHTML = '<span class="dot" style="background:#fff"></span> Copy for Claude Code (Full Context)';
+        }, 2000);
+      });
+    }
+
+    function generateForClaudeCode() {
+      const commentary = document.getElementById('commentary').value;
+
+      // Build full session history for Claude Code
+      const ts = session.roundZero.timestamp ? new Date(session.roundZero.timestamp) : new Date();
+      const timestamp = ts.toLocaleString(undefined, {
+        weekday: 'long',
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit',
+        timeZoneName: 'short'
+      });
+
+      let composite = `# Multi-LLM Consensus Session - Full History\n\n`;
+      composite += `**Session:** ${session.name}\n`;
+      composite += `**Started:** ${timestamp}\n`;
+      composite += `**Current Round:** ${session.currentRound}\n\n`;
+      composite += `You are Claude Code, a file-system adjacent AI with access to the full project context. You are participating in a multi-LLM consensus discussion. Below is the complete session history.\n\n`;
+
+      // Include Round 0 (Initial Prompt)
+      if (session.roundZero && session.roundZero.prompt) {
+        composite += `---\n\n## Round 0: Initial Prompt\n\n${session.roundZero.prompt}\n\n`;
+      }
+
+      // Include all previous rounds
+      const roundNumbers = Object.keys(session.rounds).map(Number).sort((a, b) => a - b);
+      roundNumbers.forEach(num => {
+        const round = session.rounds[num];
+        if (isRoundEmpty(round)) return;
+
+        composite += `---\n\n## Round ${num}\n\n`;
+
+        llms.forEach(llm => {
+          if (round[llm]) {
+            composite += `### ${displayNames[llm]}\n\n${round[llm]}\n\n`;
+          }
+        });
+
+        if (round.commentary) {
+          composite += `### User Commentary\n\n${round.commentary}\n\n`;
+        }
+      });
+
+      // Add current round's data if on a standard round
+      if (session.currentRound > 0) {
+        const currentResponses = llms
+          .filter(llm => document.getElementById(llm).value.trim())
+          .map(llm => `### ${displayNames[llm]}\n\n${document.getElementById(llm).value.trim()}`)
+          .join('\n\n');
+
+        if (currentResponses) {
+          composite += `---\n\n## Current Round ${session.currentRound} Responses\n\n${currentResponses}\n\n`;
+        }
+
+        if (commentary.trim()) {
+          composite += `### My Commentary\n\n${commentary.trim()}\n\n`;
+        }
+      }
+
+      composite += `---\n\n`;
+      composite += `Please analyze the above discussion and provide your perspective as Claude Code. Leverage your file-system access and project context to add unique insights that the web-based LLMs cannot provide.`;
+
+      navigator.clipboard.writeText(composite).then(() => {
+        showToast('Copied full session history for Claude Code!');
+        const btn = document.querySelector('.generate-section .generate-btn.claude-code');
+        btn.classList.add('copied');
+        btn.textContent = '✓ Copied!';
+        setTimeout(() => {
+          btn.classList.remove('copied');
+          btn.innerHTML = '<span class="dot" style="background:#fff"></span> Claude Code (Full Context)';
+        }, 2000);
+      });
+    }
+
+    function showToast(message, type = 'success', duration = 2000) {
       const toast = document.getElementById('toast');
       toast.textContent = message;
+      toast.classList.remove('warning');
+      if (type === 'warning') {
+        toast.classList.add('warning');
+      }
       toast.classList.add('visible');
       setTimeout(() => {
-        toast.classList.remove('visible');
-      }, 2000);
+        toast.classList.remove('visible', 'warning');
+      }, duration);
     }
   </script>
 </body>
