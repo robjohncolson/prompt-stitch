@@ -1285,7 +1285,8 @@
       session.enabledLlms = session.enabledLlms.filter(l => l !== llm);
       saveSession();
       renderLlmGrid();
-      updateReadinessIndicators();
+      // Reload round data into the new textareas
+      loadRound(session.currentRound);
       showToast(`Removed ${displayNames[llm]} - add back anytime`);
     }
 
