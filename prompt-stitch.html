@@ -2541,33 +2541,38 @@
     }
 
     function exportSession() {
+      // Save current state first to ensure we export this tab's data
+      saveSession();
+      const freshData = localStorage.getItem(`promptStitch_conv_${currentConversationId}`);
+      const exportData = freshData ? JSON.parse(freshData).session : session;
+
       const exportCurrentOnly = document.getElementById('exportCurrentOnly').checked;
-      const allRoundNumbers = Object.keys(session.rounds).map(Number).sort((a, b) => a - b);
+      const allRoundNumbers = Object.keys(exportData.rounds).map(Number).sort((a, b) => a - b);
 
       // If exporting current only, just use the current round
-      const roundNumbers = exportCurrentOnly ? [session.currentRound] : allRoundNumbers;
+      const roundNumbers = exportCurrentOnly ? [exportData.currentRound] : allRoundNumbers;
 
-      let markdown = `# ${session.name}\n\n`;
+      let markdown = `# ${exportData.name}\n\n`;
       markdown += `Exported: ${new Date().toLocaleString()}\n\n`;
       if (exportCurrentOnly) {
-        markdown += `*Exported current round only (Round ${session.currentRound})*\n\n`;
+        markdown += `*Exported current round only (Round ${exportData.currentRound})*\n\n`;
       }
       markdown += `---\n\n`;
 
       // Export Round 0 if it has content (only when exporting all or when current round is 0)
-      if (session.roundZero && session.roundZero.prompt && (!exportCurrentOnly || session.currentRound === 0)) {
+      if (exportData.roundZero && exportData.roundZero.prompt && (!exportCurrentOnly || exportData.currentRound === 0)) {
         markdown += `## Round 0 (Initial Prompt)\n\n`;
-        if (session.roundZero.timestamp) {
-          const ts = new Date(session.roundZero.timestamp);
+        if (exportData.roundZero.timestamp) {
+          const ts = new Date(exportData.roundZero.timestamp);
           markdown += `**Session Started:** ${ts.toLocaleString()}\n\n`;
         }
-        markdown += `### Initial Prompt\n\n${session.roundZero.prompt}\n\n`;
+        markdown += `### Initial Prompt\n\n${exportData.roundZero.prompt}\n\n`;
         markdown += `---\n\n`;
       }
 
       roundNumbers.forEach(num => {
         if (num === 0) return; // Round 0 handled separately above
-        const round = session.rounds[num];
+        const round = exportData.rounds[num];
         if (isRoundEmpty(round)) return;
 
         markdown += `## Round ${num}\n\n`;
@@ -2590,12 +2595,12 @@
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
-      const suffix = exportCurrentOnly ? `-round-${session.currentRound}` : '-export';
-      a.download = `${session.name.replace(/[^a-z0-9]/gi, '-')}${suffix}.md`;
+      const suffix = exportCurrentOnly ? `-round-${exportData.currentRound}` : '-export';
+      a.download = `${exportData.name.replace(/[^a-z0-9]/gi, '-')}${suffix}.md`;
       a.click();
       URL.revokeObjectURL(url);
 
-      showToast(exportCurrentOnly ? `Exported Round ${session.currentRound} to markdown` : 'Exported to markdown file');
+      showToast(exportCurrentOnly ? `Exported Round ${exportData.currentRound} to markdown` : 'Exported to markdown file');
     }
 
     function updateCopyButtonState() {
@@ -2605,24 +2610,29 @@
     }
 
     function copyCurrentRound() {
-      let markdown = `# ${session.name} - Round ${session.currentRound}\n\n`;
+      // Save current state first, then read back to ensure we copy this tab's data
+      saveSession();
+      const freshData = localStorage.getItem(`promptStitch_conv_${currentConversationId}`);
+      const freshSession = freshData ? JSON.parse(freshData).session : session;
+
+      let markdown = `# ${freshSession.name} - Round ${freshSession.currentRound}\n\n`;
       markdown += `Exported: ${new Date().toLocaleString()}\n\n`;
       markdown += `---\n\n`;
 
       // Include Round 0 if we're on it
-      if (session.currentRound === 0) {
-        if (session.roundZero && session.roundZero.prompt) {
+      if (freshSession.currentRound === 0) {
+        if (freshSession.roundZero && freshSession.roundZero.prompt) {
           markdown += `## Round 0 (Initial Prompt)\n\n`;
-          if (session.roundZero.timestamp) {
-            const ts = new Date(session.roundZero.timestamp);
+          if (freshSession.roundZero.timestamp) {
+            const ts = new Date(freshSession.roundZero.timestamp);
             markdown += `**Session Started:** ${ts.toLocaleString()}\n\n`;
           }
-          markdown += `### Initial Prompt\n\n${session.roundZero.prompt}\n\n`;
+          markdown += `### Initial Prompt\n\n${freshSession.roundZero.prompt}\n\n`;
         }
       } else {
-        const round = session.rounds[session.currentRound];
+        const round = freshSession.rounds[freshSession.currentRound];
         if (round && !isRoundEmpty(round)) {
-          markdown += `## Round ${session.currentRound}\n\n`;
+          markdown += `## Round ${freshSession.currentRound}\n\n`;
 
           llms.forEach(llm => {
             if (round[llm]) {
@@ -2637,7 +2647,7 @@
       }
 
       navigator.clipboard.writeText(markdown).then(() => {
-        showToast(`Round ${session.currentRound} copied to clipboard`);
+        showToast(`Round ${freshSession.currentRound} copied to clipboard`);
       }).catch(err => {
         showToast('Failed to copy to clipboard');
         console.error('Clipboard error:', err);
