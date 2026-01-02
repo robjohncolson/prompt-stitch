@@ -2677,11 +2677,16 @@
           }
 
           session = importedSession;
-          // Ensure identities exist
+          // Ensure required fields exist
           if (!session.identities) {
             session.identities = { ...defaultIdentities };
           }
-          // Ensure roundZero exists
+          if (!session.enabledLlms) {
+            session.enabledLlms = [...llms];
+          }
+          if (!session.mode) {
+            session.mode = 'standard';
+          }
           if (!session.roundZero) {
             session.roundZero = {
               prompt: '',
@@ -2691,6 +2696,7 @@
           }
           saveSession();
           document.getElementById('sessionName').textContent = session.name;
+          document.getElementById('currentConvName').textContent = truncateName(session.name, 20);
           document.getElementById('preamble').value = session.preamble;
           // Load identities into textareas
           llms.forEach(llm => {
@@ -2699,6 +2705,8 @@
               textarea.value = session.identities[llm] || defaultIdentities[llm];
             }
           });
+          renderLlmGrid();
+          renderRoundTabs();
           loadRound(session.currentRound);
           const roundCount = Object.keys(session.rounds).length;
           const hasInitialPrompt = session.roundZero && session.roundZero.prompt;
@@ -2743,7 +2751,9 @@
         // Extract timestamp if present
         const timestampMatch = round0Content.match(/\*\*Session Started:\*\* (.+)\n/);
         if (timestampMatch) {
-          imported.roundZero.timestamp = new Date(timestampMatch[1]).toISOString();
+          const parsedDate = new Date(timestampMatch[1]);
+          // Check if date is valid before calling toISOString (which throws on Invalid Date)
+          imported.roundZero.timestamp = isNaN(parsedDate.getTime()) ? null : parsedDate.toISOString();
         }
         // Extract initial prompt
         const promptMatch = round0Content.match(/### Initial Prompt\n\n([\s\S]*?)(?=\n---|\s*$)/);
